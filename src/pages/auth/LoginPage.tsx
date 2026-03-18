@@ -253,7 +253,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
             <div className="flex-1">
               <div className="relative">
                 <img 
-                  src="/e-learning-platform/images/3d-student.png" 
+                  src={`${process.env.PUBLIC_URL}/images/3d-student.png`} 
                   alt="3D Student" 
                   className="relative z-10 w-full max-w-lg mx-auto animate-float"
                 />
@@ -376,7 +376,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
             <div className="flex-1">
               <div className="relative">
                 <img 
-                  src="/e-learning-platform/images/3d-student2.png"
+                  src={`${process.env.PUBLIC_URL}/images/3d-student2.png`} 
                   alt="3D Student" 
                   className="relative z-10 w-full max-w-lg mx-auto"
                 />
