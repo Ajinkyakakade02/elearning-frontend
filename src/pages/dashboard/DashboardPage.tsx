@@ -248,7 +248,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
             <div className="flex-1">
               <div className="relative">
                 <img 
-                  src="/images/3d-student.png" 
+                  src="/e-learning-platform/images/3d-student.png"
                   alt="3D Student" 
                   className="relative z-10 w-2/3 sm:w-1/2 md:w-3/5 lg:w-2/3 xl:w-3/4 max-w-lg mx-auto animate-float"
                 />
@@ -312,7 +312,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
             <div className="flex-1">
               <div className="relative">
                 <img 
-                  src="/images/3d-student2.png" 
+                  src="/e-learning-platform/images/3d-student2.png" 
                   alt="3D Student" 
                   className="relative z-10 w-2/3 sm:w-1/2 md:w-3/5 lg:w-2/3 xl:w-3/4 max-w-lg mx-auto animate-float"
                 />
