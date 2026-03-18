@@ -1,38 +1,139 @@
-.App {
-  text-align: center;
+/* src/App.css */
+
+/* Custom CSS variables for theme colors */
+:root {
+  --transition: all 0.3s ease;
+  --navbar-height: 64px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Light theme variables */
+.app.light {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f7fafc;
+  --text-primary: #2d3748;
+  --text-secondary: #4a5568;
+  --card-bg: #ffffff;
+  --navbar-bg: rgba(255, 255, 255, 0.9);
+  --border-color: #e2e8f0;
+  --border-light: #e2e8f0;
+  --button-hover-bg: #ffffff;
+  --button-hover-text: #2d3748;
+  --button-hover-shadow: rgba(0, 0, 0, 0.1);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+/* Dark theme variables */
+.app.dark {
+  --bg-primary: #1a202c;
+  --bg-secondary: #2d3748;
+  --text-primary: #f7fafc;
+  --text-secondary: #e2e8f0;
+  --card-bg: #2d3748;
+  --navbar-bg: rgba(26, 32, 44, 0.9);
+  --border-color: #4a5568;
+  --border-light: #2d3748;
+  --button-hover-bg: #2d3748;
+  --button-hover-text: #ffffff;
+  --button-hover-shadow: rgba(0, 0, 0, 0.3);
 }
 
-.App-header {
-  background-color: #282c34;
+/* App container */
+.app {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  transition: var(--transition);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
-.App-link {
-  color: #61dafb;
+/* Page transitions */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateY(20px);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.page-transition-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 300ms, transform 300ms;
+}
+
+/* Main content area - FIXED: No borders */
+.main-content {
+  min-height: calc(100vh - 200px);
+  padding-top: 80px;
+  padding-bottom: 40px;
+  margin: 0;
+  width: 100%;
+  background-color: var(--bg-secondary);
+  border: none;
+  outline: none;
+}
+
+/* Remove any borders from common elements */
+div, section, main, header, footer, article, aside {
+  border: none;
+  outline: none;
+}
+
+/* Ensure containers have no borders */
+.container, .wrapper, .content-wrapper {
+  border: none;
+  outline: none;
+}
+
+/* For pages that need less top padding */
+.main-content.no-nav-padding {
+  padding-top: 0;
+}
+
+/* Remove any default margins from body and html */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
+  background-color: var(--bg-secondary);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #2d3748;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46a1 100%);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .main-content {
+    padding-top: 60px;
+    padding-bottom: 20px;
   }
 }

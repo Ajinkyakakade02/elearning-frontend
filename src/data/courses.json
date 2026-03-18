@@ -1,0 +1,92 @@
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "JEE",
+      "fullName": "JEE Advanced",
+      "icon": "🎓",
+      "color": "#4299e1",
+      "description": "IIT JEE Preparation",
+      "courseCount": 3,
+      "studentsCount": "15.4k",
+      "path": "/jee"
+    },
+    {
+      "id": 2,
+      "name": "NEET",
+      "fullName": "NEET UG",
+      "icon": "⚕️",
+      "color": "#48bb78",
+      "description": "Medical Entrance",
+      "courseCount": 3,
+      "studentsCount": "12.8k",
+      "path": "/neet"
+    },
+    {
+      "id": 3,
+      "name": "UPSC",
+      "fullName": "UPSC CSE",
+      "icon": "🏛️",
+      "color": "#9f7aea",
+      "description": "Civil Services",
+      "courseCount": 5,
+      "studentsCount": "8.2k",
+      "path": "/upsc"
+    },
+    {
+      "id": 4,
+      "name": "DSA",
+      "fullName": "Data Structures",
+      "icon": "💻",
+      "color": "#ed8936",
+      "description": "Coding Interviews",
+      "courseCount": 4,
+      "studentsCount": "10.1k",
+      "path": "/dsa"
+    },
+    {
+      "id": 5,
+      "name": "MHT CET",
+      "fullName": "MHT CET",
+      "icon": "🎯",
+      "color": "#f56565",
+      "description": "Maharashtra CET",
+      "courseCount": 4,
+      "studentsCount": "5.3k",
+      "path": "/quiz/5"
+    },
+    {
+      "id": 6,
+      "name": "Web Dev",
+      "fullName": "Web Development",
+      "icon": "🌐",
+      "color": "#38b2ac",
+      "description": "Full Stack",
+      "courseCount": 6,
+      "studentsCount": "20.5k",
+      "path": "/courses"
+    },
+    {
+      "id": 7,
+      "name": "Gate",
+      "fullName": "GATE",
+      "icon": "⚙️",
+      "color": "#e53e3e",
+      "description": "Engineering Entrance",
+      "courseCount": 5,
+      "studentsCount": "6.7k",
+      "path": "#"
+    },
+    {
+      "id": 8,
+      "name": "CAT",
+      "fullName": "CAT",
+      "icon": "📊",
+      "color": "#dd6b20",
+      "description": "MBA Entrance",
+      "courseCount": 4,
+      "studentsCount": "7.2k",
+      "path": "#"
+    }
+  ]
+}
