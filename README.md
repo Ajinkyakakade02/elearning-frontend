@@ -44,3 +44,52 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+
+# E-Learning Platform - Frontend
+
+A comprehensive full-stack e-learning platform built with React (TypeScript) frontend, Spring Boot backend, and MySQL database. The platform offers courses, quizzes, and learning materials for competitive exams (JEE, NEET, UPSC, MHT-CET) and DSA.
+
+## 🚀 Features
+
+- **Authentication System**: JWT-based authentication with login/register
+- **Course Management**: Browse and enroll in courses
+- **Video Lessons**: YouTube video player with progress tracking
+- **Quiz System**: Practice quizzes for various exams
+- **DSA Practice**: Data Structures & Algorithms problems with platform filters
+- **Exam Sections**: JEE, NEET, UPSC, MHT-CET preparation materials
+- **Dark/Light Mode**: Theme toggle for better user experience
+- **Responsive Design**: Works on all devices
+
+## 📋 Pages
+
+- Dashboard with course overview
+- Course listing and details
+- Video lesson player with notes
+- Quiz taking interface
+- DSA problem sheets
+- User profile and progress tracking
+
+## 🛠️ Tech Stack
+
+- **Framework**: React 18+ with TypeScript
+- **Routing**: React Router v6
+- **State Management**: React Context API
+- **Styling**: Tailwind CSS + CSS Modules
+- **HTTP Client**: Axios with interceptors
+- **Icons**: React Icons (Font Awesome)
+
+## 🏁 Getting Started
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- npm or yarn
+- Backend server running (Spring Boot)
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/YOUR_USERNAME/e-learning-frontend.git
+cd e-learning-frontend
