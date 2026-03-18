@@ -177,6 +177,9 @@ function App() {
           
           <div className={`app ${darkMode ? 'dark' : 'light'}`}>
             <Routes>
+              {/* ===== GITHUB PAGES BASE PATH REDIRECT ===== */}
+              <Route path="/e-learning-platform" element={<Navigate to="/login" replace />} />
+              
               {/* ===== PUBLIC ROUTES ===== */}
               <Route path="/login" element={
                 <PageLayout darkMode={darkMode} setDarkMode={setDarkMode}>
