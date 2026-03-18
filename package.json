@@ -49,8 +49,6 @@
     ]
   },
   "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
+    "extends": ["react-app"]
   }
 }
