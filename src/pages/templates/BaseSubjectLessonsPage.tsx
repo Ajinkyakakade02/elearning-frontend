@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaClock, FaBook, FaPlayCircle, FaLock, FaUsers, FaRupeeSign } from 'react-icons/fa';
+import { FaArrowLeft, FaClock, FaBook, FaPlayCircle, FaLock, FaRupeeSign } from 'react-icons/fa';
 import courseService from '../../services/course.service';
 import { Lesson } from '../../types/course.types';
 
