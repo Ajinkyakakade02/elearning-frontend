@@ -29,7 +29,7 @@ const MyCoursesPage: React.FC<MyCoursesPageProps> = ({ darkMode, setDarkMode }) 
   const [courses, setCourses] = useState<Map<number, Course>>(new Map());
   const [courseProgress, setCourseProgress] = useState<Map<number, number>>(new Map());
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  // Removed unused error state
   const [activeTab, setActiveTab] = useState<'in-progress' | 'completed'>('in-progress');
   
   // Clear enrollment states
@@ -40,7 +40,7 @@ const MyCoursesPage: React.FC<MyCoursesPageProps> = ({ darkMode, setDarkMode }) 
   // Fetch my courses
   const fetchMyCourses = useCallback(async () => {
     setIsLoading(true);
-    setError(null);
+    // Removed setError
 
     try {
       console.log('🔍 Fetching enrollments...');
@@ -125,7 +125,6 @@ const MyCoursesPage: React.FC<MyCoursesPageProps> = ({ darkMode, setDarkMode }) 
 
     } catch (err: any) {
       console.error('❌ Failed to fetch my courses:', err);
-      setError(err.message || 'Failed to load your courses');
       showToast.error('Failed to load your courses');
     } finally {
       setIsLoading(false);
@@ -344,6 +343,9 @@ const MyCoursesPage: React.FC<MyCoursesPageProps> = ({ darkMode, setDarkMode }) 
     );
   }
 
+  // The rest of the component remains exactly the same...
+  // (Return statement continues with all the JSX)
+  
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
       {/* Background Pattern */}

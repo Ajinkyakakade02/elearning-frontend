@@ -6,12 +6,10 @@ import { Certificate } from '../../types/certificate.types';
 import { 
   FaArrowLeft,
   FaTrophy,
-  FaGraduationCap,
   FaDownload,
   FaShareAlt,
-  FaCertificate,
-  FaRupeeSign
-} from 'react-icons/fa';
+  FaCertificate
+} from 'react-icons/fa';  // Removed FaGraduationCap and FaRupeeSign
 
 interface CertificatesPageProps {
   darkMode: boolean;
@@ -211,6 +209,9 @@ const CertificatesPage: React.FC<CertificatesPageProps> = ({ darkMode, setDarkMo
           </div>
         </div>
 
+        {/* Rest of the component remains exactly the same... */}
+        {/* (I'm keeping the rest of the code as is since it's correct) */}
+        
         {/* Certificates Grid */}
         {certificates.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

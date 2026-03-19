@@ -14,11 +14,11 @@ const ProgressPage: React.FC<ProgressPageProps> = ({ darkMode, setDarkMode }) =>
   const navigate = useNavigate();
   const { user } = useAuth();
   const [timeframe, setTimeframe] = useState<'week' | 'month' | 'all'>('all');
-  const [loading, setLoading] = useState(true);
+  // Removed unused loading state
 
   useEffect(() => {
-    // Just set loading to false since we removed payment
-    setLoading(false);
+    // Just a placeholder - no loading state needed
+    console.log('Progress page loaded for user:', user?.id);
   }, [user]);
 
   const handleBackToDashboard = useCallback(() => {

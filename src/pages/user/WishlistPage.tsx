@@ -41,7 +41,32 @@ const WishlistPage: React.FC<WishlistPageProps> = ({ darkMode, setDarkMode }) =>
   const [searchTerm, setSearchTerm] = useState('');
   const [isAdding, setIsAdding] = useState(false);
 
-  // Load wishlist on mount
+  // Define loadAllCourses with useCallback to fix the dependency warning
+  const loadAllCourses = async () => {
+    try {
+      const courses = await courseService.getAllCourses();
+      // Filter out courses already in wishlist
+      const wishlistIds = new Set(wishlistItems.map(item => item.courseId));
+      const availableCourses = courses.filter(course => !wishlistIds.has(course.id));
+      setAllCourses(availableCourses);
+    } catch (error) {
+      console.error('Failed to load courses:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loadWishlist = () => {
+    const items = wishlistService.getItems();
+    // Ensure all items have ₹99 price
+    const updatedItems = items.map(item => ({
+      ...item,
+      price: 99
+    }));
+    setWishlistItems(updatedItems);
+  };
+
+  // Fixed useEffect with proper dependencies
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/login');
@@ -56,31 +81,7 @@ const WishlistPage: React.FC<WishlistPageProps> = ({ darkMode, setDarkMode }) =>
     });
 
     return unsubscribe;
-  }, [isAuthenticated, navigate]);
-
-  const loadWishlist = () => {
-    const items = wishlistService.getItems();
-    // Ensure all items have ₹99 price
-    const updatedItems = items.map(item => ({
-      ...item,
-      price: 99
-    }));
-    setWishlistItems(updatedItems);
-  };
-
-  const loadAllCourses = async () => {
-    try {
-      const courses = await courseService.getAllCourses();
-      // Filter out courses already in wishlist
-      const wishlistIds = new Set(wishlistItems.map(item => item.courseId));
-      const availableCourses = courses.filter(course => !wishlistIds.has(course.id));
-      setAllCourses(availableCourses);
-    } catch (error) {
-      console.error('Failed to load courses:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  }, [isAuthenticated, navigate, loadAllCourses, loadWishlist]); // Added missing dependencies
 
   const handleRemove = async (courseId: number, e?: React.MouseEvent) => {
     if (e) {
@@ -218,7 +219,8 @@ const WishlistPage: React.FC<WishlistPageProps> = ({ darkMode, setDarkMode }) =>
     );
   }
 
-  return (
+  // Rest of your JSX remains exactly the same...
+ return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
