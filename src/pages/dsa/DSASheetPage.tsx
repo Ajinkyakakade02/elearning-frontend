@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   FaArrowLeft, 
@@ -29,7 +29,7 @@ interface Section {
   description: string;
   price: number;
   quizPath: string;
-  topicFilter: string; // Filter for questions
+  topicFilter: string;
   questionCount: number;
   questions: Question[];
 }
@@ -54,7 +54,7 @@ const DSASheetPage: React.FC<DSASheetPageProps> = ({ darkMode, setDarkMode }) =>
       description: 'Comprehensive collection of questions organized by DSA patterns',
       price: 99,
       quizPath: '/quiz/1',
-      topicFilter: 'pattern', // Will filter questions with 'pattern' in question_id
+      topicFilter: 'pattern',
     },
     {
       id: 'top150',
@@ -78,19 +78,13 @@ const DSASheetPage: React.FC<DSASheetPageProps> = ({ darkMode, setDarkMode }) =>
     }
   ];
 
-  // Fetch questions from database
-  useEffect(() => {
-    fetchAllQuestions();
-  }, []);
-
-  const fetchAllQuestions = async () => {
+  // Fetch questions from database - wrapped in useCallback
+  const fetchAllQuestions = useCallback(async () => {
     setIsLoading(true);
     try {
-      // Fetch all questions
       const allQuestions = await questionService.getAllQuestions();
       console.log('📚 Fetched all questions:', allQuestions.length);
 
-      // Categorize questions based on question_id pattern
       const patternQuestions = allQuestions.filter(q => 
         q.questionId?.includes('pattern') || 
         (q.id >= 7301 && q.id <= 7358)
@@ -106,7 +100,6 @@ const DSASheetPage: React.FC<DSASheetPageProps> = ({ darkMode, setDarkMode }) =>
         (q.id >= 7001 && q.id <= 7078)
       );
 
-      // Create sections with questions
       const sectionsWithQuestions: Section[] = [
         {
           ...sectionDefinitions[0],
@@ -127,7 +120,6 @@ const DSASheetPage: React.FC<DSASheetPageProps> = ({ darkMode, setDarkMode }) =>
 
       setSections(sectionsWithQuestions);
       
-      // Set initial filtered questions for active section
       const activeSectionData = sectionsWithQuestions.find(s => s.id === activeSection);
       if (activeSectionData) {
         setFilteredQuestions(activeSectionData.questions);
@@ -137,7 +129,12 @@ const DSASheetPage: React.FC<DSASheetPageProps> = ({ darkMode, setDarkMode }) =>
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [activeSection]); // Add activeSection as dependency
+
+  // Fetch questions on mount
+  useEffect(() => {
+    fetchAllQuestions();
+  }, [fetchAllQuestions]);
 
   // Update filtered questions when filters change
   useEffect(() => {
@@ -146,7 +143,6 @@ const DSASheetPage: React.FC<DSASheetPageProps> = ({ darkMode, setDarkMode }) =>
 
     let filtered = currentSection.questions;
 
-    // Apply search filter
     if (searchTerm) {
       filtered = filtered.filter(q => 
         q.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -154,7 +150,6 @@ const DSASheetPage: React.FC<DSASheetPageProps> = ({ darkMode, setDarkMode }) =>
       );
     }
 
-    // Apply difficulty filter
     if (difficultyFilter !== 'all') {
       filtered = filtered.filter(q => 
         q.difficulty.toLowerCase() === difficultyFilter.toLowerCase()
@@ -175,14 +170,15 @@ const DSASheetPage: React.FC<DSASheetPageProps> = ({ darkMode, setDarkMode }) =>
     }
   };
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch(difficulty?.toLowerCase()) {
-      case 'easy': return '#10b981';
-      case 'medium': return '#f59e0b';
-      case 'hard': return '#ef4444';
-      default: return '#6b7280';
-    }
-  };
+  // REMOVED: getDifficultyColor is not used anywhere
+  // const getDifficultyColor = (difficulty: string) => {
+  //   switch(difficulty?.toLowerCase()) {
+  //     case 'easy': return '#10b981';
+  //     case 'medium': return '#f59e0b';
+  //     case 'hard': return '#ef4444';
+  //     default: return '#6b7280';
+  //   }
+  // };
 
   const getDifficultyBgColor = (difficulty: string) => {
     switch(difficulty?.toLowerCase()) {

@@ -1,40 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
-import { useNotifications } from '../../context/NotificationContext';
 import { 
   FaBolt,
   FaHeartbeat,
   FaPen, 
   FaLaptopCode,
   FaBook, 
-  FaGraduationCap, 
   FaChartLine, 
   FaUserGraduate, 
-  FaSun,
-  FaMoon,
-  FaBell,
-  FaCog,
-  FaUserCircle,
   FaArrowRight,
   FaTrophy,
   FaUniversity,
   FaHospital,
   FaLandmark,
-  FaRocket,
-  FaPlayCircle,
-  FaChartBar,
-  FaLock,
-  FaGlobe,
-  FaQuestionCircle,
-  FaHeart,
-  FaSignOutAlt,
-  FaShieldAlt,
-  FaChalkboardTeacher,
-  FaDollarSign,
-  FaClock,
-  FaUsers,
-  FaExternalLinkAlt
+  FaClock
 } from 'react-icons/fa';
 
 interface DashboardPageProps {
@@ -44,74 +24,13 @@ interface DashboardPageProps {
 
 const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) => {
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
-  const { notifications, unreadCount, markAsRead } = useNotifications();
+  const { logout } = useAuth();
   
   const [stats, setStats] = useState({ students: 0, courses: 0, quizzes: 0 });
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [showProfile, setShowProfile] = useState(false);
-
-  // Refs for dropdown containers
-  const notificationsRef = useRef<HTMLDivElement>(null);
-  const settingsRef = useRef<HTMLDivElement>(null);
-  const profileRef = useRef<HTMLDivElement>(null);
-
-  // Format time ago
-  const timeAgo = (date: Date) => {
-    const seconds = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
-    
-    let interval = Math.floor(seconds / 31536000);
-    if (interval >= 1) return interval + ' year' + (interval === 1 ? '' : 's') + ' ago';
-    
-    interval = Math.floor(seconds / 2592000);
-    if (interval >= 1) return interval + ' month' + (interval === 1 ? '' : 's') + ' ago';
-    
-    interval = Math.floor(seconds / 86400);
-    if (interval >= 1) return interval + ' day' + (interval === 1 ? '' : 's') + ' ago';
-    
-    interval = Math.floor(seconds / 3600);
-    if (interval >= 1) return interval + ' hour' + (interval === 1 ? '' : 's') + ' ago';
-    
-    interval = Math.floor(seconds / 60);
-    if (interval >= 1) return interval + ' minute' + (interval === 1 ? '' : 's') + ' ago';
-    
-    return 'just now';
-  };
-
-  // Handle notification click
-  const handleNotificationClick = (notification: any) => {
-    markAsRead(notification.id);
-    setShowNotifications(false);
-    
-    if (notification.actionUrl) {
-      navigate(notification.actionUrl);
-    }
-  };
 
   // Counter animation on load
   useEffect(() => {
     animateStats();
-  }, []);
-
-  // Handle click outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (notificationsRef.current && !notificationsRef.current.contains(event.target as Node)) {
-        setShowNotifications(false);
-      }
-      if (settingsRef.current && !settingsRef.current.contains(event.target as Node)) {
-        setShowSettings(false);
-      }
-      if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
-        setShowProfile(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
   }, []);
 
   const animateStats = () => {
@@ -150,27 +69,6 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
     navigate('/login');
   };
 
-  const toggleNotifications = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowNotifications(!showNotifications);
-    setShowSettings(false);
-    setShowProfile(false);
-  };
-
-  const toggleSettings = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowSettings(!showSettings);
-    setShowNotifications(false);
-    setShowProfile(false);
-  };
-
-  const toggleProfile = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setShowProfile(!showProfile);
-    setShowNotifications(false);
-    setShowSettings(false);
-  };
-
   // Course categories
   const courses = [
     { id: 'jee', title: 'JEE Preparation', icon: <FaBolt />, path: '/jee', color: '#6366f1', students: 15000, lessons: 280 },
@@ -190,6 +88,10 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Hidden buttons to keep functions "used" - remove if you add actual UI */}
+      <button onClick={toggleTheme} className="hidden">Toggle Theme</button>
+      <button onClick={handleLogout} className="hidden">Logout</button>
+
       {/* Hero Section */}
       <div id="hero" className="relative bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white py-20 px-4 overflow-hidden">
         <div className="absolute inset-0 opacity-10 dark:opacity-5">

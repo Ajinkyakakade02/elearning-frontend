@@ -67,7 +67,7 @@ const UPSCPage: React.FC<UPSCPageProps> = ({ darkMode, setDarkMode }) => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [UPSC_COURSE_IDS]); // Added dependency
 
   useEffect(() => {
     fetchUPSCCourses();
@@ -89,14 +89,7 @@ const UPSCPage: React.FC<UPSCPageProps> = ({ darkMode, setDarkMode }) => {
     setFilteredCourses(filtered);
   }, [activeFilter, searchTerm, courses]);
 
-  const getLevelColor = (level: string) => {
-    switch(level?.toLowerCase()) {
-      case 'beginner': return '#10b981';
-      case 'intermediate': return '#f59e0b';
-      case 'advanced': return '#ef4444';
-      default: return '#6b7280';
-    }
-  };
+  // Removed unused getLevelColor function
 
   const getLevelBgColor = (level: string) => {
     switch(level?.toLowerCase()) {

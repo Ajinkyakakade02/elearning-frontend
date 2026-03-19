@@ -10,8 +10,7 @@ import {
   FaLock,
   FaUsers,
   FaRupeeSign,
-  FaBalanceScale,
-  FaGavel
+  FaBalanceScale
 } from 'react-icons/fa';
 
 interface IndianPolityPageProps {

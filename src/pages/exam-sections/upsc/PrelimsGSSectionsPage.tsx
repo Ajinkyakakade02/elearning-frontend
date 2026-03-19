@@ -6,12 +6,6 @@ import {
   FaBook,
   FaUsers,
   FaStar,
-  FaLandmark,
-  FaMountain,
-  FaGavel,
-  FaChartLine,
-  FaLeaf,
-  FaFlask,
   FaRupeeSign
 } from 'react-icons/fa';
 

@@ -214,16 +214,7 @@ const QuizSubtopicsPage: React.FC<QuizSubtopicsPageProps> = ({ darkMode, setDark
     }
     
     setFilteredSubtopics(filtered);
-  }, [searchTerm, activeFilter]);
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch(difficulty.toLowerCase()) {
-      case 'easy': return '#10b981';
-      case 'medium': return '#f59e0b';
-      case 'hard': return '#ef4444';
-      default: return '#6b7280';
-    }
-  };
+  }, [searchTerm, activeFilter, subtopics]); // Added subtopics to dependencies
 
   const getDifficultyBgColor = (difficulty: string) => {
     switch(difficulty.toLowerCase()) {
@@ -326,7 +317,7 @@ const QuizSubtopicsPage: React.FC<QuizSubtopicsPageProps> = ({ darkMode, setDark
 
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex items-center gap-4">
             <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center text-white text-2xl">
-              <span>💰</span>
+              <FaRupeeSign />
             </div>
             <div>
               <h3 className="text-2xl font-bold text-gray-800 dark:text-white">₹ {totalValue}/-</h3>
@@ -465,7 +456,7 @@ const QuizSubtopicsPage: React.FC<QuizSubtopicsPageProps> = ({ darkMode, setDark
 
                   {/* Topics Preview */}
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {subtopic.topics.slice(0, 3).map((topic, idx) => (
+                    {subtopic.topics.slice(0, 3).map((topic: string, idx: number) => (
                       <span 
                         key={idx} 
                         className="px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 text-xs rounded-full"

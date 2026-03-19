@@ -8,12 +8,11 @@ import {
   FaStar,
   FaHeart,
   FaBrain,
-  FaUserTie,
-  FaGavel,
+
   FaFileAlt,
   FaRupeeSign,
   FaBalanceScale,
-  FaSmile,
+  
   FaUserGraduate
 } from 'react-icons/fa';
 

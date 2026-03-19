@@ -62,15 +62,29 @@ const WishlistPage: React.FC<WishlistPageProps> = ({ darkMode, setDarkMode }) =>
     setWishlistItems(updatedItems);
   }, []);
 
-  // Fixed useEffect with proper dependencies
+  // Fixed useEffect with proper dependencies and loading state
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/login');
-      return;
-    }
+    const initializePage = async () => {
+      if (!isAuthenticated) {
+        navigate('/login');
+        return;
+      }
 
-    loadWishlist();
-    loadAllCourses();
+      setIsLoading(true);
+      try {
+        await Promise.all([
+          loadWishlist(),
+          loadAllCourses()
+        ]);
+      } catch (error) {
+        console.error('Failed to load data:', error);
+        showToast.error('Failed to load wishlist');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initializePage();
 
     const unsubscribe = wishlistService.subscribe(() => {
       setWishlistItems(wishlistService.getItems());

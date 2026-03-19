@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { 
   FaArrowLeft, 
   FaClock, 
   FaCheckCircle,
-  FaTimesCircle,
   FaFlag,
-  FaQuestionCircle,
   FaRupeeSign,
   FaLock
 } from 'react-icons/fa';
@@ -21,7 +19,7 @@ interface QuizTakingPageProps {
 const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ darkMode, setDarkMode }) => {
   const { quizId, subjectId, subtopicId } = useParams<{ quizId: string; subjectId: string; subtopicId: string }>();
   const navigate = useNavigate();
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
   
   const [questions, setQuestions] = useState<any[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -40,36 +38,13 @@ const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ darkMode, setDarkMode }
     price: 99
   });
 
-  useEffect(() => {
-    // Check if user has purchased this quiz
-    checkPurchaseStatus();
-    fetchQuestions();
-  }, [subtopicId]);
-
-  const checkPurchaseStatus = () => {
+  const checkPurchaseStatus = useCallback(() => {
     // Mock check - in real app, call API to check if user purchased
     const purchasedQuizzes = JSON.parse(localStorage.getItem('purchasedQuizzes') || '[]');
     setIsPurchased(purchasedQuizzes.includes(subtopicId));
-  };
+  }, [subtopicId]);
 
-  const handlePurchase = () => {
-    if (!isAuthenticated) {
-      showToast.error('Please login to purchase');
-      navigate('/login');
-      return;
-    }
-
-    // Mock purchase - in real app, integrate payment gateway
-    const purchasedQuizzes = JSON.parse(localStorage.getItem('purchasedQuizzes') || '[]');
-    purchasedQuizzes.push(subtopicId);
-    localStorage.setItem('purchasedQuizzes', JSON.stringify(purchasedQuizzes));
-    
-    setIsPurchased(true);
-    setShowPurchaseModal(false);
-    showToast.success('Quiz purchased successfully!');
-  };
-
-  const fetchQuestions = async () => {
+  const fetchQuestions = useCallback(async () => {
     setIsLoading(true);
     try {
       // Mock questions based on subtopic
@@ -208,7 +183,12 @@ const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ darkMode, setDarkMode }
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [subtopicId]);
+
+  useEffect(() => {
+    checkPurchaseStatus();
+    fetchQuestions();
+  }, [checkPurchaseStatus, fetchQuestions, subtopicId]); // Added all dependencies
 
   useEffect(() => {
     if (timeLeft > 0 && !showResults && isPurchased) {
@@ -276,6 +256,24 @@ const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ darkMode, setDarkMode }
   // AFTER RESULTS - back to subtopics page
   const handleBackToTopics = () => {
     navigate(`/quiz/${quizId}/${subjectId}`, { replace: true });
+  };
+
+  const handlePurchase = () => {
+    if (!isAuthenticated) {
+      showToast.error('Please login to purchase');
+      navigate('/login');
+      return;
+    }
+
+    // Mock purchase - in real app, integrate payment gateway
+    const purchasedQuizzes = JSON.parse(localStorage.getItem('purchasedQuizzes') || '[]');
+    if (subtopicId) {
+      purchasedQuizzes.push(subtopicId);
+      localStorage.setItem('purchasedQuizzes', JSON.stringify(purchasedQuizzes));
+      setIsPurchased(true);
+      setShowPurchaseModal(false);
+      showToast.success('Quiz purchased successfully!');
+    }
   };
 
   if (isLoading) {
@@ -632,26 +630,22 @@ const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ darkMode, setDarkMode }
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Question Palette</h3>
           <div className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2">
             {questions.map((_, index) => {
-              let statusClass = '';
               let bgColor = '';
               
               if (selectedAnswers[index] !== -1) {
-                statusClass = 'answered';
                 bgColor = 'bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400';
               } else if (markedForReview.includes(index)) {
-                statusClass = 'marked';
                 bgColor = 'bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-400';
               } else {
-                statusClass = 'notVisited';
                 bgColor = 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300';
               }
 
               return (
                 <div
                   key={index}
-                  className={`aspect-square rounded-lg flex items-center justify-center font-semibold cursor-pointer transition-all ${
-                    bgColor
-                  } ${currentIndex === index ? 'ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-gray-800' : ''}`}
+                  className={`aspect-square rounded-lg flex items-center justify-center font-semibold cursor-pointer transition-all ${bgColor} ${
+                    currentIndex === index ? 'ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-gray-800' : ''
+                  }`}
                   onClick={() => setCurrentIndex(index)}
                 >
                   {index + 1}

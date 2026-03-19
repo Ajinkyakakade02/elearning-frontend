@@ -11,7 +11,6 @@ import {
   FaBrain,
   FaCode,
   FaFlask,
-  FaLandmark,
   FaRupeeSign
 } from 'react-icons/fa';
 
@@ -69,7 +68,7 @@ const QuizPage: React.FC<QuizPageProps> = ({ darkMode, setDarkMode }) => {
       id: 5,
       title: 'MHT CET Quiz Series',
       description: 'Complete preparation for MHT CET entrance exam with chapter-wise tests',
-      icon: '🎓',
+      icon: <FaBook />,
       color: '#f56565',
       topicCount: 12,
       totalQuestions: 150,
@@ -99,17 +98,7 @@ const QuizPage: React.FC<QuizPageProps> = ({ darkMode, setDarkMode }) => {
     }
     
     setFilteredSeries(filtered);
-  }, [searchTerm, activeFilter]);
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch(difficulty.toLowerCase()) {
-      case 'easy': return '#10b981';
-      case 'medium': return '#f59e0b';
-      case 'advanced': return '#ef4444';
-      case 'mixed': return '#8b5cf6';
-      default: return '#6b7280';
-    }
-  };
+  }, [searchTerm, activeFilter, quizSeries]); // Added quizSeries to dependencies
 
   const getDifficultyBgColor = (difficulty: string) => {
     switch(difficulty.toLowerCase()) {

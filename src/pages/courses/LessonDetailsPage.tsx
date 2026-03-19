@@ -12,12 +12,10 @@ import {
   FaBook,
   FaPlayCircle,
   FaTrophy,
-  FaQuestionCircle,
   FaLock,
   FaStar,
   FaUsers,
   FaGraduationCap,
-  FaChartLine,
   FaRupeeSign
 } from 'react-icons/fa';
 

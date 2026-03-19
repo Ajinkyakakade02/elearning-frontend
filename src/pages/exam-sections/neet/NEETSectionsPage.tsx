@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import courseService from '../../../services/course.service';
 import { 
   FaArrowLeft, 
   FaClock, 
   FaBook,
   FaUsers,
   FaStar,
-  FaLeaf,
-  FaDna,
-  FaMicroscope,
   FaRupeeSign
 } from 'react-icons/fa';
 
@@ -20,23 +16,6 @@ interface NEETSectionsPageProps {
 
 const NEETSectionsPage: React.FC<NEETSectionsPageProps> = ({ darkMode, setDarkMode }) => {
   const navigate = useNavigate();
-  const [course, setCourse] = useState<any>(null);
-
-  useEffect(() => {
-    fetchCourseDetails();
-  }, []);
-
-  const fetchCourseDetails = async () => {
-    try {
-      const courseData = await courseService.getCourseById(10);
-      // Force price to ₹99
-      if (courseData) {
-        setCourse({...courseData, price: 99});
-      }
-    } catch (error) {
-      console.error('Failed to fetch course:', error);
-    }
-  };
 
   const sections = [
     {
@@ -106,7 +85,6 @@ const NEETSectionsPage: React.FC<NEETSectionsPageProps> = ({ darkMode, setDarkMo
   ];
 
   const totalStudents = sections.reduce((sum, section) => sum + section.students, 0);
-  const avgRating = (sections.reduce((sum, section) => sum + section.rating, 0) / sections.length).toFixed(1);
   const totalBundleValue = sections.length * 99;
 
   return (
@@ -158,7 +136,7 @@ const NEETSectionsPage: React.FC<NEETSectionsPageProps> = ({ darkMode, setDarkMo
 
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 flex items-center gap-4">
             <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-purple-700 rounded-xl flex items-center justify-center text-white text-2xl">
-              <span>💰</span>
+              <FaRupeeSign />
             </div>
             <div>
               <h3 className="text-2xl font-bold text-gray-800 dark:text-white">₹ {totalBundleValue}/-</h3>
@@ -255,5 +233,4 @@ const NEETSectionsPage: React.FC<NEETSectionsPageProps> = ({ darkMode, setDarkMo
   );
 };
 
-// THIS IS CRITICAL - export the component
 export default NEETSectionsPage;

@@ -18,20 +18,7 @@ import {
   FaGift
 } from 'react-icons/fa';
 
-// Define types locally
-interface Course {
-  id: number;
-  title: string;
-  description: string;
-  instructorName: string;
-  level: string;
-  durationHours: number;
-  totalLessons: number;
-  totalStudents: number;
-  price: number;
-  rating: number;
-  categoryName: string;
-}
+// REMOVED: The unused Course interface
 
 interface MHTCETChemistryPageProps {
   darkMode: boolean;

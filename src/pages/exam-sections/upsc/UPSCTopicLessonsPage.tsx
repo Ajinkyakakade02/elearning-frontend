@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import courseService from '../../../services/course.service';
 import { Lesson } from '../../../types/course.types';
@@ -28,53 +28,50 @@ const UPSCTopicLessonsPage: React.FC<UPSCTopicLessonsPageProps> = ({ darkMode, s
     description: ''
   });
 
-  useEffect(() => {
-    fetchLessons();
-  }, [sectionId]);
+  // Define section data outside component or use useMemo
+  const sectionData: Record<string, { title: string; icon: string; color: string; description: string; lessonIds: number[] }> = {
+    'prelims-gs': {
+      title: 'Prelims GS',
+      icon: '📝',
+      color: '#3b82f6',
+      description: 'Complete Prelims GS preparation',
+      lessonIds: Array.from({ length: 28 }, (_, i) => 801 + i) // 801-828
+    },
+    'csat': {
+      title: 'CSAT',
+      icon: '🧮',
+      color: '#f59e0b',
+      description: 'Complete CSAT preparation',
+      lessonIds: Array.from({ length: 12 }, (_, i) => 829 + i) // 829-840
+    },
+    'mains-gs': {
+      title: 'Mains GS Papers',
+      icon: '📚',
+      color: '#10b981',
+      description: 'Complete Mains GS preparation',
+      lessonIds: Array.from({ length: 45 }, (_, i) => 841 + i) // 841-885
+    },
+    'ethics': {
+      title: 'Ethics (GS IV)',
+      icon: '⚖️',
+      color: '#8b5cf6',
+      description: 'Complete Ethics preparation',
+      lessonIds: Array.from({ length: 18 }, (_, i) => 886 + i) // 886-903
+    },
+    'essay-optional': {
+      title: 'Essay & Optional',
+      icon: '✍️',
+      color: '#ec4899',
+      description: 'Complete Essay & Optional preparation',
+      lessonIds: Array.from({ length: 14 }, (_, i) => 904 + i) // 904-917
+    }
+  };
 
-  const fetchLessons = async () => {
+  // Use useCallback to memoize the fetchLessons function
+  const fetchLessons = useCallback(async () => {
     setIsLoading(true);
     try {
       const allLessons = await courseService.getCourseLessons(13);
-
-      // Define section info and lesson ranges
-      const sectionData: any = {
-        'prelims-gs': {
-          title: 'Prelims GS',
-          icon: '📝',
-          color: '#3b82f6',
-          description: 'Complete Prelims GS preparation',
-          lessonIds: Array.from({ length: 28 }, (_, i) => 801 + i) // 801-828
-        },
-        'csat': {
-          title: 'CSAT',
-          icon: '🧮',
-          color: '#f59e0b',
-          description: 'Complete CSAT preparation',
-          lessonIds: Array.from({ length: 12 }, (_, i) => 829 + i) // 829-840
-        },
-        'mains-gs': {
-          title: 'Mains GS Papers',
-          icon: '📚',
-          color: '#10b981',
-          description: 'Complete Mains GS preparation',
-          lessonIds: Array.from({ length: 45 }, (_, i) => 841 + i) // 841-885
-        },
-        'ethics': {
-          title: 'Ethics (GS IV)',
-          icon: '⚖️',
-          color: '#8b5cf6',
-          description: 'Complete Ethics preparation',
-          lessonIds: Array.from({ length: 18 }, (_, i) => 886 + i) // 886-903
-        },
-        'essay-optional': {
-          title: 'Essay & Optional',
-          icon: '✍️',
-          color: '#ec4899',
-          description: 'Complete Essay & Optional preparation',
-          lessonIds: Array.from({ length: 14 }, (_, i) => 904 + i) // 904-917
-        }
-      };
 
       if (sectionId && sectionData[sectionId]) {
         setSectionInfo(sectionData[sectionId]);
@@ -92,7 +89,11 @@ const UPSCTopicLessonsPage: React.FC<UPSCTopicLessonsPageProps> = ({ darkMode, s
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [sectionId]); // Add sectionId as dependency
+
+  useEffect(() => {
+    fetchLessons();
+  }, [fetchLessons]); // Now fetchLessons is stable with useCallback
 
   const handleStartLesson = (lessonId: number) => {
     navigate(`/courses/13/learn/${lessonId}`);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // Add useCallback
 import { useParams, useNavigate } from 'react-router-dom';
 import courseService from '../../../services/course.service';
 import { showToast } from '../../../utils/toast';
@@ -35,12 +35,8 @@ const ChemistrySectionLessonsPage: React.FC<ChemistrySectionLessonsPageProps> = 
     lessonIds: [] as number[]
   });
 
-  useEffect(() => {
-    fetchLessons();
-    checkEnrollment();
-  }, [sectionId]);
-
-  const checkEnrollment = async () => {
+  // Wrap checkEnrollment in useCallback
+  const checkEnrollment = useCallback(async () => {
     try {
       const enrolled = await courseService.checkEnrollment(9);
       setIsEnrolled(enrolled);
@@ -48,9 +44,10 @@ const ChemistrySectionLessonsPage: React.FC<ChemistrySectionLessonsPageProps> = 
       console.error('Failed to check enrollment:', error);
       setIsEnrolled(false);
     }
-  };
+  }, []); // Empty dependency array since it doesn't depend on any props/state
 
-  const fetchLessons = async () => {
+  // Wrap fetchLessons in useCallback
+  const fetchLessons = useCallback(async () => {
     setIsLoading(true);
     try {
       const allLessons = await courseService.getCourseLessons(9);
@@ -99,7 +96,13 @@ const ChemistrySectionLessonsPage: React.FC<ChemistrySectionLessonsPageProps> = 
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [sectionId]); // Add sectionId as dependency since it's used inside
+
+  // Fixed useEffect with proper dependencies
+  useEffect(() => {
+    fetchLessons();
+    checkEnrollment();
+  }, [sectionId, fetchLessons, checkEnrollment]); // Now includes all dependencies
 
   const handleStartLesson = (lessonId: number) => {
     navigate(`/courses/9/learn/${lessonId}`);

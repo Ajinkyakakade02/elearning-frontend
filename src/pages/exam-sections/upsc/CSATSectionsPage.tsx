@@ -6,11 +6,6 @@ import {
   FaBook,
   FaUsers,
   FaStar,
-  FaBookOpen,
-  FaPuzzlePiece,
-  FaCalculator,
-  FaChartBar,
-  FaBalanceScale,
   FaRupeeSign
 } from 'react-icons/fa';
 

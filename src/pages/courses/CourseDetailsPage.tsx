@@ -12,8 +12,7 @@ import {
   FaLock,
   FaGraduationCap,
   FaChartLine,
-  FaRupeeSign,
-  FaCode
+  FaRupeeSign
 } from 'react-icons/fa';
 import { showToast } from '../../utils/toast';
 

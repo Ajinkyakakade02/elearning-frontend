@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // Add useCallback import
 import { useParams, useNavigate } from 'react-router-dom';
 import courseService from '../../../services/course.service';
 import { Lesson } from '../../../types/course.types';
@@ -31,12 +31,44 @@ const MainsGSPaperLessonsPage: React.FC<MainsGSPaperLessonsPageProps> = ({ darkM
     description: ''
   });
 
-  useEffect(() => {
-    fetchLessons();
-    checkEnrollment();
-  }, [paperId]);
+  // Define paperData outside component or use useMemo
+  const paperData = {
+    'gs-paper-1': {
+      title: 'GS Paper I',
+      subtitle: 'Indian Heritage, Culture, History & Geography',
+      icon: '🏛️',
+      color: '#3b82f6',
+      description: 'Complete preparation for GS Paper I',
+      lessonIds: [841, 842, 843, 844, 845, 846, 847, 848, 849, 850, 851, 852]
+    },
+    'gs-paper-2': {
+      title: 'GS Paper II',
+      subtitle: 'Polity, Governance, Social Justice & International Relations',
+      icon: '⚖️',
+      color: '#10b981',
+      description: 'Complete preparation for GS Paper II',
+      lessonIds: [853, 854, 855, 856, 857, 858, 859, 860, 861, 862, 863]
+    },
+    'gs-paper-3': {
+      title: 'GS Paper III',
+      subtitle: 'Technology, Economy, Environment & Security',
+      icon: '🔬',
+      color: '#f59e0b',
+      description: 'Complete preparation for GS Paper III',
+      lessonIds: [864, 865, 866, 867, 868, 869, 870, 871, 872, 873, 874]
+    },
+    'gs-paper-4': {
+      title: 'GS Paper IV',
+      subtitle: 'Ethics, Integrity & Aptitude',
+      icon: '🤝',
+      color: '#8b5cf6',
+      description: 'Complete preparation for GS Paper IV',
+      lessonIds: [875, 876, 877, 878, 879, 880, 881, 882, 883, 884, 885]
+    }
+  };
 
-  const checkEnrollment = async () => {
+  // Wrap checkEnrollment in useCallback
+  const checkEnrollment = useCallback(async () => {
     try {
       const enrolled = await courseService.checkEnrollment(13);
       setIsEnrolled(enrolled);
@@ -44,56 +76,22 @@ const MainsGSPaperLessonsPage: React.FC<MainsGSPaperLessonsPageProps> = ({ darkM
       console.error('Failed to check enrollment:', error);
       setIsEnrolled(false);
     }
-  };
+  }, []); // No dependencies
 
-  const fetchLessons = async () => {
+  // Wrap fetchLessons in useCallback
+  const fetchLessons = useCallback(async () => {
     setIsLoading(true);
     try {
       // Fetch all lessons for course 13
       const allLessons = await courseService.getCourseLessons(13);
       
-      // Define paper info and lesson ranges for Mains GS (IDs 841-885)
-      const paperData: any = {
-        'gs-paper-1': {
-          title: 'GS Paper I',
-          subtitle: 'Indian Heritage, Culture, History & Geography',
-          icon: '🏛️',
-          color: '#3b82f6',
-          description: 'Complete preparation for GS Paper I',
-          lessonIds: [841, 842, 843, 844, 845, 846, 847, 848, 849, 850, 851, 852]
-        },
-        'gs-paper-2': {
-          title: 'GS Paper II',
-          subtitle: 'Polity, Governance, Social Justice & International Relations',
-          icon: '⚖️',
-          color: '#10b981',
-          description: 'Complete preparation for GS Paper II',
-          lessonIds: [853, 854, 855, 856, 857, 858, 859, 860, 861, 862, 863]
-        },
-        'gs-paper-3': {
-          title: 'GS Paper III',
-          subtitle: 'Technology, Economy, Environment & Security',
-          icon: '🔬',
-          color: '#f59e0b',
-          description: 'Complete preparation for GS Paper III',
-          lessonIds: [864, 865, 866, 867, 868, 869, 870, 871, 872, 873, 874]
-        },
-        'gs-paper-4': {
-          title: 'GS Paper IV',
-          subtitle: 'Ethics, Integrity & Aptitude',
-          icon: '🤝',
-          color: '#8b5cf6',
-          description: 'Complete preparation for GS Paper IV',
-          lessonIds: [875, 876, 877, 878, 879, 880, 881, 882, 883, 884, 885]
-        }
-      };
-
-      if (paperId && paperData[paperId]) {
-        setPaperInfo(paperData[paperId]);
+      if (paperId && paperData[paperId as keyof typeof paperData]) {
+        const currentPaper = paperData[paperId as keyof typeof paperData];
+        setPaperInfo(currentPaper);
         
         // Filter lessons by IDs
         const filteredLessons = allLessons.filter(lesson => 
-          paperData[paperId].lessonIds.includes(lesson.id)
+          currentPaper.lessonIds.includes(lesson.id)
         );
         
         // Sort by ID
@@ -107,7 +105,12 @@ const MainsGSPaperLessonsPage: React.FC<MainsGSPaperLessonsPageProps> = ({ darkM
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [paperId, paperData]); // Add paperId and paperData as dependencies
+
+  useEffect(() => {
+    fetchLessons();
+    checkEnrollment();
+  }, [fetchLessons, checkEnrollment]); // Add the functions as dependencies
 
   const handleStartLesson = (lessonId: number) => {
     navigate(`/courses/13/learn/${lessonId}`);

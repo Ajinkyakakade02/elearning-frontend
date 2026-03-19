@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { 
   FaArrowLeft, 
   FaClock, 
@@ -8,41 +8,19 @@ import {
   FaTimesCircle,
   FaFlag,
   FaList,
-  FaStar,
   FaCalendarAlt,
-  FaChevronDown,
   FaAtom,
-  FaBook,
-  FaChartLine,
-  FaGraduationCap,
   FaTrophy,
-  FaMedal,
-  FaAward,
   FaRocket,
-  FaBrain,
-  FaMicroscope,
-  FaFlask,
-  FaSquareRootAlt,
-  FaInfinity,
   FaBolt,
   FaMagnet,
   FaSun,
-  FaMoon,
   FaGlobe,
   FaFire,
-  FaSnowflake,
   FaWater,
-  FaWind,
   FaVolumeUp,
-  FaVolumeDown,
-  FaVolumeMute,
-  FaWaveSquare,
   FaRuler,
-  FaWeight,
-  FaBalanceScale,
-  FaClock as FaHourglass,
-  FaThermometerHalf,
-  FaTachometerAlt
+  FaThermometerHalf
 } from 'react-icons/fa';
 
 interface QuizJEEPhysicsPageProps {
@@ -73,7 +51,7 @@ interface YearlyQuiz {
 }
 
 const QuizJEEPhysicsPage: React.FC<QuizJEEPhysicsPageProps> = ({ darkMode, setDarkMode }) => {
-  const { topicId } = useParams<{ topicId: string }>();
+  // const { topicId } = useParams<{ topicId: string }>();
   const navigate = useNavigate();
   
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
@@ -86,7 +64,6 @@ const QuizJEEPhysicsPage: React.FC<QuizJEEPhysicsPageProps> = ({ darkMode, setDa
   const [showAnswers, setShowAnswers] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [quizStarted, setQuizStarted] = useState(false);
   const [showYearSelector, setShowYearSelector] = useState(true);
   const [topicInfo, setTopicInfo] = useState({
@@ -96,9 +73,9 @@ const QuizJEEPhysicsPage: React.FC<QuizJEEPhysicsPageProps> = ({ darkMode, setDa
     totalQuestions: 0
   });
 
-  // All JEE Physics Questions organized by year (you'll add your questions here)
+  // All JEE Physics Questions organized by year - YOU WILL ADD YOUR QUESTIONS HERE
   const allJEEPhysicsQuestions: Question[] = [
-    {
+     {
     "id": 26,
     "question_text": "[JEE Main 2025, 22 Jan Morning Shift] Given below are two statements: Statement I: In a vernier callipers, one vernier scale division is always smaller than one main scale division. Statement II: The vernier constant is given by one main scale division multiplied by the number of vernier scale division. In the light of the above statements, choose the correct answer from the options given below.",
     "option_a": "Both Statement I and Statement II are false.",
@@ -2139,18 +2116,22 @@ const QuizJEEPhysicsPage: React.FC<QuizJEEPhysicsPageProps> = ({ darkMode, setDa
   ];
 
   // Organize questions by year
-  useEffect(() => {
-    const years = [2025, 2024, 2023, 2022, 2021];
-    const quizzes: YearlyQuiz[] = years.map(year => ({
-      year,
-      title: `JEE Main ${year}`,
-      questionCount: allJEEPhysicsQuestions.filter(q => q.year === year).length,
-      questions: allJEEPhysicsQuestions.filter(q => q.year === year)
-    }));
-    
-    setYearlyQuizzes(quizzes);
-    setIsLoading(false);
-  }, []);
+  // Organize questions by year
+useEffect(() => {
+  // Get unique years from questions - using Array.from instead of spread
+  const uniqueYears = Array.from(new Set(allJEEPhysicsQuestions.map(q => q.year)));
+  const years = uniqueYears.sort((a, b) => b - a);
+  
+  const quizzes: YearlyQuiz[] = years.map(year => ({
+    year,
+    title: `JEE Main ${year}`,
+    questionCount: allJEEPhysicsQuestions.filter(q => q.year === year).length,
+    questions: allJEEPhysicsQuestions.filter(q => q.year === year)
+  }));
+  
+  setYearlyQuizzes(quizzes);
+  setIsLoading(false);
+}, []);
 
   const handleYearSelect = (year: number) => {
     const selectedQuiz = yearlyQuizzes.find(q => q.year === year);
@@ -2748,7 +2729,6 @@ const QuizJEEPhysicsPage: React.FC<QuizJEEPhysicsPageProps> = ({ darkMode, setDa
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-4">Question Palette</h3>
           <div className="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2 mb-4">
             {questions.map((_, index) => {
-              let statusClass = '';
               let bgColor = '';
               
               if (selectedAnswers[index] !== '') {

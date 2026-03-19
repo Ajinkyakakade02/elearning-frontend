@@ -3,15 +3,11 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { 
   FaArrowLeft, 
   FaClock, 
-  FaQuestionCircle,
   FaCheckCircle,
   FaTimesCircle,
   FaFlag,
   FaList,
-  FaStar,
-  FaCalendarAlt,
-  FaChevronDown,
-  FaFlask
+  FaCalendarAlt
 } from 'react-icons/fa';
 
 interface QuizJEEChemistryPageProps {
@@ -42,7 +38,7 @@ interface YearlyQuiz {
 }
 
 const QuizJEEChemistryPage: React.FC<QuizJEEChemistryPageProps> = ({ darkMode, setDarkMode }) => {
-  const { topicId } = useParams<{ topicId: string }>();
+ const params = useParams();
   const navigate = useNavigate();
   
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
@@ -2108,17 +2104,17 @@ const QuizJEEChemistryPage: React.FC<QuizJEEChemistryPageProps> = ({ darkMode, s
 
   // Organize questions by year
   useEffect(() => {
-    const years = [2025, 2024, 2023, 2022, 2021];
-    const quizzes: YearlyQuiz[] = years.map(year => ({
-      year,
-      title: `JEE Main ${year}`,
-      questionCount: allJEEChemistryQuestions.filter(q => q.year === year).length,
-      questions: allJEEChemistryQuestions.filter(q => q.year === year)
-    }));
-    
-    setYearlyQuizzes(quizzes);
-    setIsLoading(false);
-  }, []);
+  const years = [2025, 2024, 2023, 2022, 2021];
+  const quizzes: YearlyQuiz[] = years.map(year => ({
+    year,
+    title: `JEE Main ${year}`,
+    questionCount: allJEEChemistryQuestions.filter(q => q.year === year).length,
+    questions: allJEEChemistryQuestions.filter(q => q.year === year)
+  }));
+  
+  setYearlyQuizzes(quizzes);
+  setIsLoading(false);
+}, []);
 
   const handleYearSelect = (year: number) => {
     const selectedQuiz = yearlyQuizzes.find(q => q.year === year);

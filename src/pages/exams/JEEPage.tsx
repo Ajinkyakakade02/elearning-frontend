@@ -63,7 +63,7 @@ const JEEPage: React.FC<JEEPageProps> = ({ darkMode, setDarkMode }) => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [JEE_COURSE_IDS]); // Added dependency
 
   useEffect(() => {
     fetchJEECourses();
@@ -79,20 +79,13 @@ const JEEPage: React.FC<JEEPageProps> = ({ darkMode, setDarkMode }) => {
     if (searchTerm) {
       filtered = filtered.filter(course =>
         course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.description.toLowerCase().includes(searchTerm.toLowerCase())
+        course.description?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
     setFilteredCourses(filtered);
   }, [activeFilter, searchTerm, courses]);
 
-  const getLevelColor = (level: string) => {
-    switch(level?.toLowerCase()) {
-      case 'beginner': return '#10b981';
-      case 'intermediate': return '#f59e0b';
-      case 'advanced': return '#ef4444';
-      default: return '#6b7280';
-    }
-  };
+  // Removed unused getLevelColor function
 
   const getLevelBgColor = (level: string) => {
     switch(level?.toLowerCase()) {

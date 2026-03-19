@@ -5,10 +5,8 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useTheme } from '../../context/ThemeContext';
 import toast from 'react-hot-toast';
 import axiosInstance from '../../services/axios.config';
-import styles from '../../styles/pages/auth/ForgotPasswordPage.module.css';
 
 
 interface ForgotPasswordPageProps {

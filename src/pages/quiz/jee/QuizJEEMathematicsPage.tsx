@@ -38,7 +38,7 @@ interface YearlyQuiz {
 }
 
 const QuizJEEMathematicsPage: React.FC<QuizJEEMathematicsPageProps> = ({ darkMode, setDarkMode }) => {
-  const { topicId } = useParams<{ topicId: string }>();
+  // const { topicId } = useParams<{ topicId: string }>();
   const navigate = useNavigate();
   
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
@@ -2038,25 +2038,26 @@ const QuizJEEMathematicsPage: React.FC<QuizJEEMathematicsPageProps> = ({ darkMod
   ];
 
   // Organize questions by year
-  useEffect(() => {
-    const years = [2025, 2024, 2023, 2022, 2021];
-    const quizzes: YearlyQuiz[] = years.map(year => ({
-      year,
-      title: `JEE Main ${year}`,
-      questionCount: allJEEMathematicsQuestions.filter(q => q.year === year).length,
-      questions: allJEEMathematicsQuestions.filter(q => q.year === year)
-    }));
-    
-    // Debug logs to verify counts
-    console.log('2025 questions:', quizzes.find(q => q.year === 2025)?.questionCount);
-    console.log('2024 questions:', quizzes.find(q => q.year === 2024)?.questionCount);
-    console.log('2023 questions:', quizzes.find(q => q.year === 2023)?.questionCount);
-    console.log('2022 questions:', quizzes.find(q => q.year === 2022)?.questionCount);
-    console.log('2021 questions:', quizzes.find(q => q.year === 2021)?.questionCount);
-    
-    setYearlyQuizzes(quizzes);
-    setIsLoading(false);
-  }, []);
+ // Organize questions by year
+useEffect(() => {
+  const years = [2025, 2024, 2023, 2022, 2021];
+  const quizzes: YearlyQuiz[] = years.map(year => ({
+    year,
+    title: `JEE Main ${year}`,
+    questionCount: allJEEMathematicsQuestions.filter(q => q.year === year).length,
+    questions: allJEEMathematicsQuestions.filter(q => q.year === year)
+  }));
+  
+  // Debug logs to verify counts
+  console.log('2025 questions:', quizzes.find(q => q.year === 2025)?.questionCount);
+  console.log('2024 questions:', quizzes.find(q => q.year === 2024)?.questionCount);
+  console.log('2023 questions:', quizzes.find(q => q.year === 2023)?.questionCount);
+  console.log('2022 questions:', quizzes.find(q => q.year === 2022)?.questionCount);
+  console.log('2021 questions:', quizzes.find(q => q.year === 2021)?.questionCount);
+  
+  setYearlyQuizzes(quizzes);
+  setIsLoading(false);
+}, []); // Empty dependency array is correct
 
   const handleYearSelect = (year: number) => {
     const selectedQuiz = yearlyQuizzes.find(q => q.year === year);

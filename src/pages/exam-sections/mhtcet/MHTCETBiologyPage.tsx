@@ -6,9 +6,6 @@ import {
   FaUsers, 
   FaStar,
   FaBook,
-  FaLeaf,
-  FaPaw,
-  FaDna,
   FaRupeeSign
 } from 'react-icons/fa';
 

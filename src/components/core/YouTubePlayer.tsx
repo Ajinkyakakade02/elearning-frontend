@@ -15,7 +15,6 @@ interface YouTubePlayerProps {
 
 const YouTubePlayer: React.FC<YouTubePlayerProps> = ({
   videoUrl,
-  title,
   onVideoEnd,
   onVideoPlay,
   onVideoPause,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // Add useCallback import
 import { useParams, useNavigate } from 'react-router-dom';
 import courseService from '../../../services/course.service';
 import { Lesson } from '../../../types/course.types';
@@ -30,22 +30,8 @@ const EthicsTopicLessonsPage: React.FC<EthicsTopicLessonsPageProps> = ({ darkMod
     description: ''
   });
 
-  useEffect(() => {
-    fetchLessons();
-    checkEnrollment();
-  }, [topicId]);
-
-  const checkEnrollment = async () => {
-    try {
-      const enrolled = await courseService.checkEnrollment(13);
-      setIsEnrolled(enrolled);
-    } catch (error) {
-      console.error('Failed to check enrollment:', error);
-      setIsEnrolled(false);
-    }
-  };
-
-  const fetchLessons = async () => {
+  // Wrap fetchLessons in useCallback
+  const fetchLessons = useCallback(async () => {
     setIsLoading(true);
     try {
       // Fetch all lessons for course 13
@@ -109,7 +95,24 @@ const EthicsTopicLessonsPage: React.FC<EthicsTopicLessonsPageProps> = ({ darkMod
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [topicId]); // Add topicId as dependency
+
+  // Wrap checkEnrollment in useCallback
+  const checkEnrollment = useCallback(async () => {
+    try {
+      const enrolled = await courseService.checkEnrollment(13);
+      setIsEnrolled(enrolled);
+    } catch (error) {
+      console.error('Failed to check enrollment:', error);
+      setIsEnrolled(false);
+    }
+  }, []); // No dependencies needed
+
+  // Now useEffect has all dependencies properly listed
+  useEffect(() => {
+    fetchLessons();
+    checkEnrollment();
+  }, [fetchLessons, checkEnrollment]); // Add the functions as dependencies
 
   const handleStartLesson = (lessonId: number) => {
     navigate(`/courses/13/learn/${lessonId}`);
@@ -117,6 +120,10 @@ const EthicsTopicLessonsPage: React.FC<EthicsTopicLessonsPageProps> = ({ darkMod
 
   const handleEnroll = () => {
     navigate('/courses/13');
+  };
+
+  const handleBack = () => {
+    navigate('/courses/13/section/ethics');
   };
 
   if (isLoading) {
@@ -143,7 +150,7 @@ const EthicsTopicLessonsPage: React.FC<EthicsTopicLessonsPageProps> = ({ darkMod
         <div className="mb-6">
           <button 
             className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors group"
-            onClick={() => navigate('/courses/13/section/ethics')}
+            onClick={handleBack}
           >
             <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" /> Back to Ethics
           </button>

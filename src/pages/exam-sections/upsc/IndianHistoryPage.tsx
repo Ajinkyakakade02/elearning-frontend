@@ -9,10 +9,8 @@ import {
   FaPlayCircle,
   FaLock,
   FaUsers,
-  FaCheckCircle,
   FaRupeeSign,
-  FaLandmark,
-  FaCircle
+  FaLandmark
 } from 'react-icons/fa';
 
 interface IndianHistoryPageProps {

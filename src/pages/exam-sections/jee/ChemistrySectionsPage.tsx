@@ -2,8 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   FaArrowLeft, 
-  FaFlask, 
-  FaDna, 
+
   FaLeaf,
   FaClock,
   FaBook,
@@ -11,7 +10,7 @@ import {
   FaStar,
   FaRupeeSign,
   FaBolt,
-  FaAtom,
+  
   FaVial
 } from 'react-icons/fa';
 

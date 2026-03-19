@@ -10,8 +10,7 @@ import {
   FaLock,
   FaUsers,
   FaRupeeSign,
-  FaMountain,
-  FaGlobeAsia
+  FaMountain
 } from 'react-icons/fa';
 
 interface IndianGeographyPageProps {

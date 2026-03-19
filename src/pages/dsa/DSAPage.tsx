@@ -8,7 +8,6 @@ import {
   FaStar,
   FaClock,
   FaRupeeSign,
-  FaGraduationCap,
   FaLaptopCode,
   FaArrowRight
 } from 'react-icons/fa';

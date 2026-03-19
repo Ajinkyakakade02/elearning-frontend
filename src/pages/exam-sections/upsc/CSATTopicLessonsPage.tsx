@@ -30,10 +30,14 @@ const CSATTopicLessonsPage: React.FC<CSATTopicLessonsPageProps> = ({ darkMode, s
     description: ''
   });
 
-  useEffect(() => {
-    fetchLessons();
-    checkEnrollment();
-  }, [topicId]);
+ useEffect(() => {
+  const loadData = async () => {
+    await fetchLessons();
+    await checkEnrollment();
+  };
+  
+  loadData();
+}, [topicId]); // Only topicId is needed as dependency
 
   const checkEnrollment = async () => {
     try {

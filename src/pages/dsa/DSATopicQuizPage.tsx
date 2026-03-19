@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import YouTubePlayer from '../../components/core/YouTubePlayer';
 import { 
@@ -10,14 +10,9 @@ import {
   FaStar,
   FaSearch,
   FaFilter,
-  FaPlayCircle,
-  FaBook,
   FaYoutube,
-  FaRupeeSign,
   FaChartBar,
-  FaLayerGroup,
   FaTag,
-  FaExclamationCircle,
   FaSpinner,
   FaGripLines,
   FaLink,
@@ -26,13 +21,10 @@ import {
   FaChartLine,
   FaSort,
   FaGraduationCap,
-  FaVideo,
   FaChevronRight,
   FaPlay,
-  FaThLarge,
   FaLayerGroup as FaPlatforms,
-  FaCheckCircle,
-  FaExternalLinkSquareAlt
+  FaCheckCircle
 } from 'react-icons/fa';
 import { SiLeetcode, SiGeeksforgeeks, SiCodechef } from 'react-icons/si';
 import { FaHackerrank } from 'react-icons/fa';
@@ -52,6 +44,20 @@ interface PlatformInfo {
   bgColor: string;
 }
 
+// Define TopicInfo type
+interface TopicInfo {
+  title: string;
+  icon: React.ReactNode;
+  color: string;
+  description: string;
+  videoId: string;
+}
+
+// Define TopicMap type with index signature
+interface TopicMap {
+  [key: string]: TopicInfo;
+}
+
 const DSATopicQuizPage: React.FC<DSATopicQuizPageProps> = ({ darkMode, setDarkMode }) => {
   const { topicId } = useParams<{ topicId: string }>();
   const navigate = useNavigate();
@@ -63,17 +69,17 @@ const DSATopicQuizPage: React.FC<DSATopicQuizPageProps> = ({ darkMode, setDarkMo
   const [filteredProblems, setFilteredProblems] = useState<DSAProblem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [videoLecture, setVideoLecture] = useState<VideoLecture | null>(null);
- const [topicInfo, setTopicInfo] = useState<{
-  title: string;
-  icon: React.ReactNode;  // This accepts any valid React node
-  color: string;
-  description: string;
-}>({
-  title: '',
-  icon: <FaCode />,  // Default icon
-  color: '',
-  description: ''
-});
+  const [topicInfo, setTopicInfo] = useState<{
+    title: string;
+    icon: React.ReactNode;
+    color: string;
+    description: string;
+  }>({
+    title: '',
+    icon: <FaCode />,
+    color: '',
+    description: ''
+  });
 
   // Platform configuration
   const platforms: Record<string, PlatformInfo> = {
@@ -107,8 +113,8 @@ const DSATopicQuizPage: React.FC<DSATopicQuizPageProps> = ({ darkMode, setDarkMo
     }
   };
 
-  // Topic mapping with icons as React components
-  const topicMap: Record<string, { title: string; icon: React.ReactNode; color: string; description: string; videoId: string }> = {
+  // Topic mapping with proper typing
+  const topicMap: TopicMap = {
     'arrays': {
       title: 'Arrays',
       icon: <FaGripLines />,
@@ -168,9 +174,9 @@ const DSATopicQuizPage: React.FC<DSATopicQuizPageProps> = ({ darkMode, setDarkMo
   };
 
   // Handle watch lecture click - navigate to course 22
-  const handleWatchLecture = () => {
+  const handleWatchLecture = useCallback(() => {
     navigate('/courses/22');
-  };
+  }, [navigate]);
 
   // Fetch problems from database
   useEffect(() => {
@@ -179,17 +185,18 @@ const DSATopicQuizPage: React.FC<DSATopicQuizPageProps> = ({ darkMode, setDarkMo
       
       setIsLoading(true);
       try {
-        // Set topic info
-        if (topicMap[topicId]) {
+        // Set topic info if valid topic
+        if (topicId in topicMap) {
+          const topic = topicMap[topicId];
           setTopicInfo({
-            title: topicMap[topicId].title,
-            icon: topicMap[topicId].icon,
-            color: topicMap[topicId].color,
-            description: topicMap[topicId].description
+            title: topic.title,
+            icon: topic.icon,
+            color: topic.color,
+            description: topic.description
           });
           
           // Fetch video lecture
-          const video = await videoService.getVideoLecture(topicMap[topicId].videoId);
+          const video = await videoService.getVideoLecture(topic.videoId);
           setVideoLecture(video);
         }
 
@@ -229,9 +236,9 @@ const DSATopicQuizPage: React.FC<DSATopicQuizPageProps> = ({ darkMode, setDarkMo
     setFilteredProblems(filtered);
   }, [selectedPlatform, difficultyFilter, searchTerm, problems]);
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     navigate('/dsa');
-  };
+  }, [navigate]);
 
   const getDifficultyColor = (difficulty: string) => {
     switch(difficulty.toLowerCase()) {
@@ -242,31 +249,12 @@ const DSATopicQuizPage: React.FC<DSATopicQuizPageProps> = ({ darkMode, setDarkMo
     }
   };
 
-  const getDifficultyBgColor = (difficulty: string) => {
-    switch(difficulty.toLowerCase()) {
-      case 'easy': return 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300';
-      case 'medium': return 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300';
-      case 'hard': return 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300';
-      default: return 'bg-gray-100 text-gray-700 dark:bg-gray-700 dark:text-gray-300';
-    }
-  };
-
   const getPlatformIcon = (platform: string) => {
     return platforms[platform]?.icon || <FaCode />;
   };
 
   const getPlatformColor = (platform: string) => {
     return platforms[platform]?.color || '#6366f1';
-  };
-
-  const getPlatformBgColor = (platform: string) => {
-    switch(platform) {
-      case 'leetcode': return 'bg-amber-50 dark:bg-amber-900/20';
-      case 'geeksforgeeks': return 'bg-green-50 dark:bg-green-900/20';
-      case 'codechef': return 'bg-amber-50 dark:bg-amber-900/20';
-      case 'hackerrank': return 'bg-emerald-50 dark:bg-emerald-900/20';
-      default: return 'bg-gray-50 dark:bg-gray-800';
-    }
   };
 
   if (isLoading) {
@@ -280,6 +268,7 @@ const DSATopicQuizPage: React.FC<DSATopicQuizPageProps> = ({ darkMode, setDarkMo
     );
   }
 
+  // Rest of your JSX remains exactly the same...
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
       {/* Background Pattern */}
@@ -342,7 +331,7 @@ const DSATopicQuizPage: React.FC<DSATopicQuizPageProps> = ({ darkMode, setDarkMo
           </div>
         </div>
 
-        {/* Video Lecture Section - Optional: You can keep or remove this */}
+        {/* Video Lecture Section */}
         {videoLecture && (
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden mb-8">
             <div className="p-6 border-b border-gray-200 dark:border-gray-700">
@@ -501,7 +490,7 @@ const DSATopicQuizPage: React.FC<DSATopicQuizPageProps> = ({ darkMode, setDarkMo
           <FaChartBar /> Showing {filteredProblems.length} of {problems.length} problems
         </div>
 
-        {/* Questions List - Same style as quiz page */}
+        {/* Questions List */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
           <div className="space-y-3">
             {filteredProblems.length > 0 ? (

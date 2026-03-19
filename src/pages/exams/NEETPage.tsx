@@ -18,10 +18,7 @@ import {
   FaChalkboardTeacher,
   FaSeedling,
   FaChartBar,
-  FaRocket,
-  FaLeaf,
-  FaMicroscope,
-  FaBriefcaseMedical
+  FaRocket
 } from 'react-icons/fa';
 
 interface NEETPageProps {
@@ -87,7 +84,7 @@ const NEETPage: React.FC<NEETPageProps> = ({ darkMode, setDarkMode }) => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [NEET_COURSE_IDS]); // Added dependency
 
   // Helper function to get lesson count based on course ID
   const getLessonCountForCourse = (courseId: number): number => {
@@ -119,14 +116,7 @@ const NEETPage: React.FC<NEETPageProps> = ({ darkMode, setDarkMode }) => {
     setFilteredCourses(filtered);
   }, [activeFilter, searchTerm, courses]);
 
-  const getLevelColor = (level: string) => {
-    switch(level?.toLowerCase()) {
-      case 'beginner': return '#10b981';
-      case 'intermediate': return '#f59e0b';
-      case 'advanced': return '#ef4444';
-      default: return '#6b7280';
-    }
-  };
+  // Removed unused getLevelColor function
 
   const getLevelBgColor = (level: string) => {
     switch(level?.toLowerCase()) {

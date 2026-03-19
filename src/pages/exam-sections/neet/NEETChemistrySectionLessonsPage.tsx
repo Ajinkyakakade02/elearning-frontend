@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import courseService from '../../../services/course.service';
 import { Lesson } from '../../../types/course.types';
@@ -35,12 +35,8 @@ const NEETChemistrySectionLessonsPage: React.FC<NEETChemistrySectionLessonsPageP
     lessonIds: [] as number[]
   });
 
-  useEffect(() => {
-    fetchLessons();
-    checkEnrollment();
-  }, [sectionId]);
-
-  const checkEnrollment = async () => {
+  // ✅ Wrap checkEnrollment in useCallback
+  const checkEnrollment = useCallback(async () => {
     try {
       const enrolled = await courseService.checkEnrollment(12);
       setIsEnrolled(enrolled);
@@ -48,9 +44,10 @@ const NEETChemistrySectionLessonsPage: React.FC<NEETChemistrySectionLessonsPageP
       console.error('Failed to check enrollment:', error);
       setIsEnrolled(false);
     }
-  };
+  }, []); // No dependencies, as courseService is stable
 
-  const fetchLessons = async () => {
+  // ✅ Wrap fetchLessons in useCallback
+  const fetchLessons = useCallback(async () => {
     setIsLoading(true);
     try {
       console.log('🔍 Fetching lessons for NEET Chemistry course 12...');
@@ -109,7 +106,13 @@ const NEETChemistrySectionLessonsPage: React.FC<NEETChemistrySectionLessonsPageP
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [sectionId]); // ✅ sectionId is now a dependency
+
+  // ✅ useEffect now has all dependencies properly listed
+  useEffect(() => {
+    fetchLessons();
+    checkEnrollment();
+  }, [fetchLessons, checkEnrollment]); // ✅ Both functions are now stable dependencies
 
   const handleStartLesson = (lessonId: number) => {
     navigate(`/courses/12/learn/${lessonId}`);

@@ -10,8 +10,7 @@ import {
   FaLock,
   FaUsers,
   FaRupeeSign,
-  FaChartLine,
-  FaMoneyBillWave
+  FaChartLine
 } from 'react-icons/fa';
 
 interface IndianEconomyPageProps {

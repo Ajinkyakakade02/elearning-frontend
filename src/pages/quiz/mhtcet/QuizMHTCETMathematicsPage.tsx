@@ -11,23 +11,18 @@ import {
   FaSquareRootAlt,
   FaCalculator,
   FaChartLine,
-  FaChartBar,
+  
   FaChartPie,
   FaInfinity,
-  // FaFunction,
+  
   FaPercentage,
   FaPlusCircle,
-  FaMinusCircle,
-  FaTimes,
-  FaDivide,
+ 
   FaEquals,
   FaGreaterThanEqual,
-  FaLessThanEqual,
+ 
   FaTrophy,
-  FaStar,
-  FaGraduationCap,
-  FaCrown,
-  FaMedal
+ 
 } from 'react-icons/fa';
 
 interface QuizMHTCETMathematicsPageProps {

@@ -11,18 +11,15 @@ import {
   FaFlask,
   FaAtom,
   FaDna,
-  FaMicroscope,
+ 
   FaTrophy,
-  FaStar,
-  FaGraduationCap,
-  // FaBeaker,
+ 
   FaBurn,
   FaFire,
   FaWater,
   FaWind,
   FaLeaf,
-  FaMountain,
-  FaCrown
+  FaMountain
 } from 'react-icons/fa';
 
 interface QuizMHTCETChemistryPageProps {

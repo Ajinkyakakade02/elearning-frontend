@@ -5,16 +5,13 @@ import { quizService } from '../../services/quiz.service';
 import certificateService from '../../services/certificate.service';
 import { 
   FaTrophy, 
-  FaStar, 
   FaClock, 
   FaCheckCircle, 
   FaTimesCircle,
-  FaDownload,
   FaShare,
   FaRedo,
   FaHome,
-  FaChartBar,
-  FaFilter
+  FaChartBar
 } from 'react-icons/fa';
 import { showToast } from '../../utils/toast';
 
@@ -32,10 +29,6 @@ const QuizResultsPage: React.FC<QuizResultsPageProps> = ({ darkMode, setDarkMode
   const [isLoading, setIsLoading] = useState(true);
   const [showCertificate, setShowCertificate] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
-
-  useEffect(() => {
-    fetchResults();
-  }, [quizId]);
 
   const fetchResults = async () => {
     setIsLoading(true);
@@ -69,6 +62,10 @@ const QuizResultsPage: React.FC<QuizResultsPageProps> = ({ darkMode, setDarkMode
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchResults();
+  }, [quizId]); // Removed fetchResults from dependencies as it's defined inside
 
   const handleGenerateCertificate = async () => {
     if (!user) {

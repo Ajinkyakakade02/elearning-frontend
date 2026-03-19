@@ -6,10 +6,6 @@ import {
   FaBook,
   FaUsers,
   FaStar,
-  FaLandmark,
-  FaGlobe,
-  FaMicrochip,
-  FaBalanceScale,
   FaRupeeSign
 } from 'react-icons/fa';
 

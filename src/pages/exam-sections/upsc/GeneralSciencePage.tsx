@@ -10,8 +10,7 @@ import {
   FaLock,
   FaUsers,
   FaRupeeSign,
-  FaFlask,
-  FaAtom,
+
   FaMicroscope
 } from 'react-icons/fa';
 
