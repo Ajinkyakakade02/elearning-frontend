@@ -4,11 +4,6 @@ import {
   FaArrowLeft, 
   FaExternalLinkAlt,
   FaCode,
-  FaClock,
-  FaUsers,
-  FaStar,
-  FaBook,
-  FaFilter,
   FaSearch,
   FaRupeeSign,
   FaChartBar,
@@ -88,7 +83,6 @@ const BaseTopicQuizPage: React.FC<BaseTopicQuizPageProps> = ({
   questionCount,
   price = PRICING.QUIZ_DEFAULT
 }) => {
-  const { topic } = useParams<{ topic: string }>();
   const navigate = useNavigate();
   
   const [selectedPlatform, setSelectedPlatform] = useState<string | null>(null);
@@ -99,63 +93,37 @@ const BaseTopicQuizPage: React.FC<BaseTopicQuizPageProps> = ({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [platforms, setPlatforms] = useState<string[]>([]);
-  const [stats, setStats] = useState<any>(null);
 
   // Fetch questions when component mounts or topic changes
   useEffect(() => {
+    const fetchQuestions = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        // Map the topic ID to database format
+        const dbTopic = mapTopicToDb(topicId);
+        console.log(`📡 Fetching questions for topic: ${topicId} -> DB topic: ${dbTopic}`);
+        
+        const data = await questionService.getQuestionsByTopic(dbTopic);
+        console.log(`✅ Loaded ${data.length} questions for ${topicId}`);
+        
+        setQuestions(data);
+        setFilteredQuestions(data);
+        
+        // Get unique platforms
+        const uniquePlatforms = Array.from(new Set(data.map((q: Question) => q.platform)));
+        setPlatforms(uniquePlatforms);
+        
+      } catch (err) {
+        console.error('Failed to fetch questions:', err);
+        setError('Failed to load questions. Please try again later.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchQuestions();
   }, [topicId]);
-
-  // Update platforms and stats when questions change
-  useEffect(() => {
-    if (questions.length > 0) {
-      // Get unique platforms - fixed to work with older TypeScript
-      const uniquePlatforms = Array.from(new Set(questions.map(q => q.platform)));
-      setPlatforms(uniquePlatforms);
-      
-      // Calculate statistics
-      const byDifficulty = {
-        Easy: questions.filter(q => q.difficulty === 'Easy').length,
-        Medium: questions.filter(q => q.difficulty === 'Medium').length,
-        Hard: questions.filter(q => q.difficulty === 'Hard').length
-      };
-      
-      const byPlatform = uniquePlatforms.reduce((acc, platform) => {
-        acc[platform] = questions.filter(q => q.platform === platform).length;
-        return acc;
-      }, {} as Record<string, number>);
-      
-      setStats({ 
-        totalQuestions: questions.length, 
-        byDifficulty, 
-        byPlatform 
-      });
-    } else {
-      setPlatforms(['leetcode', 'geeksforgeeks', 'codechef', 'hackerrank']);
-    }
-  }, [questions]);
-
-  // Fetch questions from database
-  const fetchQuestions = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      // Map the topic ID to database format
-      const dbTopic = mapTopicToDb(topicId);
-      console.log(`📡 Fetching questions for topic: ${topicId} -> DB topic: ${dbTopic}`);
-      
-      const data = await questionService.getQuestionsByTopic(dbTopic);
-      console.log(`✅ Loaded ${data.length} questions for ${topicId}`);
-      
-      setQuestions(data);
-      setFilteredQuestions(data);
-    } catch (err) {
-      console.error('Failed to fetch questions:', err);
-      setError('Failed to load questions. Please try again later.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Filter questions based on selected platform, difficulty, and search
   useEffect(() => {
@@ -195,23 +163,23 @@ const BaseTopicQuizPage: React.FC<BaseTopicQuizPageProps> = ({
 
   // Get platform color
   const getPlatformColor = (platform: string): string => {
-     const colors: Record<string, string> = {
-    leetcode: '#FFA116',      // LeetCode orange
-    geeksforgeeks: '#2F8D46',  // GeeksforGeeks green
-    codechef: '#5B4638',       // CodeChef brown
-    hackerrank: '#00EA64'      // HackerRank green
-  };
+    const colors: Record<string, string> = {
+      leetcode: '#FFA116',
+      geeksforgeeks: '#2F8D46',
+      codechef: '#5B4638',
+      hackerrank: '#00EA64'
+    };
     return colors[platform.toLowerCase()] || '#6b7280';
   };
 
   // Get platform icon
   const getPlatformIcon = (platform: string): React.ReactNode => {
-   const icons: Record<string, React.ReactNode> = {
-    leetcode: <SiLeetcode />,
-    geeksforgeeks: <SiGeeksforgeeks />,
-    codechef: <SiCodechef />,
-    hackerrank: <SiHackerrank />
-  };
+    const icons: Record<string, React.ReactNode> = {
+      leetcode: <SiLeetcode />,
+      geeksforgeeks: <SiGeeksforgeeks />,
+      codechef: <SiCodechef />,
+      hackerrank: <SiHackerrank />
+    };
     return icons[platform.toLowerCase()] || <FaCode />;
   };
 
@@ -239,7 +207,7 @@ const BaseTopicQuizPage: React.FC<BaseTopicQuizPageProps> = ({
           <h3 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">Error</h3>
           <p className="text-gray-600 dark:text-gray-300 mb-6">{error}</p>
           <button 
-            onClick={fetchQuestions}
+            onClick={() => window.location.reload()}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
           >
             Try Again
@@ -323,7 +291,7 @@ const BaseTopicQuizPage: React.FC<BaseTopicQuizPageProps> = ({
                       onClick={() => handlePlatformClick(platform)}
                     >
                       <div className="flex items-start gap-4">
-                        <div className="text-3xl" style={{ color: getPlatformColor(platform) }}>
+                        <div className="text-4xl" style={{ color: getPlatformColor(platform) }}>
                           {getPlatformIcon(platform)}
                         </div>
                         <div className="flex-1">

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { wishlistService } from '../../services/wishlist.service';
@@ -41,22 +41,18 @@ const WishlistPage: React.FC<WishlistPageProps> = ({ darkMode, setDarkMode }) =>
   const [searchTerm, setSearchTerm] = useState('');
   const [isAdding, setIsAdding] = useState(false);
 
-  // Define loadAllCourses with useCallback to fix the dependency warning
-  const loadAllCourses = async () => {
+  // Load all courses with useCallback
+  const loadAllCourses = useCallback(async () => {
     try {
-      const courses = await courseService.getAllCourses();
-      // Filter out courses already in wishlist
-      const wishlistIds = new Set(wishlistItems.map(item => item.courseId));
-      const availableCourses = courses.filter(course => !wishlistIds.has(course.id));
-      setAllCourses(availableCourses);
+      const data = await courseService.getAllCourses();
+      setAllCourses(data);
     } catch (error) {
       console.error('Failed to load courses:', error);
-    } finally {
-      setIsLoading(false);
     }
-  };
+  }, []);
 
-  const loadWishlist = () => {
+  // Load wishlist with useCallback
+  const loadWishlist = useCallback(() => {
     const items = wishlistService.getItems();
     // Ensure all items have ₹99 price
     const updatedItems = items.map(item => ({
@@ -64,7 +60,7 @@ const WishlistPage: React.FC<WishlistPageProps> = ({ darkMode, setDarkMode }) =>
       price: 99
     }));
     setWishlistItems(updatedItems);
-  };
+  }, []);
 
   // Fixed useEffect with proper dependencies
   useEffect(() => {
@@ -81,7 +77,7 @@ const WishlistPage: React.FC<WishlistPageProps> = ({ darkMode, setDarkMode }) =>
     });
 
     return unsubscribe;
-  }, [isAuthenticated, navigate, loadAllCourses, loadWishlist]); // Added missing dependencies
+  }, [isAuthenticated, navigate, loadAllCourses, loadWishlist]); // All dependencies included
 
   const handleRemove = async (courseId: number, e?: React.MouseEvent) => {
     if (e) {
@@ -219,8 +215,7 @@ const WishlistPage: React.FC<WishlistPageProps> = ({ darkMode, setDarkMode }) =>
     );
   }
 
-  // Rest of your JSX remains exactly the same...
- return (
+  return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 relative">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
@@ -324,7 +319,7 @@ const WishlistPage: React.FC<WishlistPageProps> = ({ darkMode, setDarkMode }) =>
             {wishlistItems.map(item => (
               <div 
                 key={item.id} 
-                className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+                className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 relative"
               >
                 {/* Card Header */}
                 <div className="p-6 text-center bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20">
