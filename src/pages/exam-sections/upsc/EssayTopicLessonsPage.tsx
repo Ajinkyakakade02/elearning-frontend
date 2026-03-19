@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import courseService from '../../../services/course.service';
 import { Lesson } from '../../../types/course.types';
@@ -30,12 +30,26 @@ const EssayTopicLessonsPage: React.FC<EssayTopicLessonsPageProps> = ({ darkMode,
     description: ''
   });
 
-  useEffect(() => {
-    fetchLessons();
-    checkEnrollment();
-  }, [topicId]);
+  // Define topicData inside component but stable
+  const topicData = {
+    'essay-writing': {
+      title: 'Essay Writing',
+      icon: '✍️',
+      color: '#8b5cf6',
+      description: 'Master essay writing for UPSC Mains',
+      lessonIds: [904, 905, 906, 907, 908, 909, 910]
+    },
+    'optional-subject': {
+      title: 'Optional Subject',
+      icon: '📚',
+      color: '#ec4899',
+      description: 'Complete preparation for your optional subject',
+      lessonIds: [911, 912, 913, 914, 915, 916, 917]
+    }
+  };
 
-  const checkEnrollment = async () => {
+  // Wrap checkEnrollment in useCallback
+  const checkEnrollment = useCallback(async () => {
     try {
       const enrolled = await courseService.checkEnrollment(13);
       setIsEnrolled(enrolled);
@@ -43,43 +57,23 @@ const EssayTopicLessonsPage: React.FC<EssayTopicLessonsPageProps> = ({ darkMode,
       console.error('Failed to check enrollment:', error);
       setIsEnrolled(false);
     }
-  };
+  }, []);
 
-  const fetchLessons = async () => {
+  // Wrap fetchLessons in useCallback
+  const fetchLessons = useCallback(async () => {
     setIsLoading(true);
     try {
-      // Fetch all lessons for course 13
       const allLessons = await courseService.getCourseLessons(13);
       
-      // Define topic info and lesson ranges for Essay & Optional (IDs 904-917)
-      const topicData: any = {
-        'essay-writing': {
-          title: 'Essay Writing',
-          icon: '✍️',
-          color: '#8b5cf6',
-          description: 'Master essay writing for UPSC Mains',
-          lessonIds: [904, 905, 906, 907, 908, 909, 910] // Essay lessons 1-7
-        },
-        'optional-subject': {
-          title: 'Optional Subject',
-          icon: '📚',
-          color: '#ec4899',
-          description: 'Complete preparation for your optional subject',
-          lessonIds: [911, 912, 913, 914, 915, 916, 917] // Optional lessons 1-7
-        }
-      };
-
-      if (topicId && topicData[topicId]) {
-        setTopicInfo(topicData[topicId]);
+      if (topicId && topicData[topicId as keyof typeof topicData]) {
+        const currentTopic = topicData[topicId as keyof typeof topicData];
+        setTopicInfo(currentTopic);
         
-        // Filter lessons by IDs
         const filteredLessons = allLessons.filter(lesson => 
-          topicData[topicId].lessonIds.includes(lesson.id)
+          currentTopic.lessonIds.includes(lesson.id)
         );
         
-        // Sort by ID
         filteredLessons.sort((a, b) => a.id - b.id);
-        
         setLessons(filteredLessons);
       }
       
@@ -88,7 +82,12 @@ const EssayTopicLessonsPage: React.FC<EssayTopicLessonsPageProps> = ({ darkMode,
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [topicId]); // Only topicId is needed as dependency
+
+  useEffect(() => {
+    fetchLessons();
+    checkEnrollment();
+  }, [fetchLessons, checkEnrollment]);
 
   const handleStartLesson = (lessonId: number) => {
     navigate(`/courses/13/learn/${lessonId}`);

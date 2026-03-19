@@ -105,7 +105,7 @@ const MHTCETBiologyPage: React.FC<MHTCETBiologyPageProps> = ({ darkMode, setDark
   ];
 
   const totalStudents = biologySections.reduce((sum, s) => sum + s.students, 0);
-  const avgRating = (biologySections.reduce((sum, s) => sum + s.rating, 0) / biologySections.length).toFixed(1);
+  // const avgRating = (biologySections.reduce((sum, s) => sum + s.rating, 0) / biologySections.length).toFixed(1);
   const totalBundleValue = biologySections.length * 99;
 
   useEffect(() => {

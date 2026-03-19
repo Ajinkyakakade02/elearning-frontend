@@ -2,8 +2,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   FaArrowLeft, 
-  FaFlask, 
-  FaDna, 
   FaLeaf,
   FaClock,
   FaBook,
@@ -90,7 +88,7 @@ const NEETChemistrySectionsPage: React.FC<NEETChemistrySectionsPageProps> = ({ d
   ];
 
   const totalStudents = sections.reduce((sum, section) => sum + section.students, 0);
-  const avgRating = (sections.reduce((sum, section) => sum + section.rating, 0) / sections.length).toFixed(1);
+  // const avgRating = (sections.reduce((sum, section) => sum + section.rating, 0) / sections.length).toFixed(1);
   const totalBundleValue = sections.length * 99;
 
   return (

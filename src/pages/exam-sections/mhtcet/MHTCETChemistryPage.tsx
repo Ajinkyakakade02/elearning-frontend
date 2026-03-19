@@ -11,7 +11,6 @@ import {
   FaStar,
   FaBook,
   FaFlask,
-  FaAtom,
   FaLeaf,
   FaRupeeSign,
   FaBolt,

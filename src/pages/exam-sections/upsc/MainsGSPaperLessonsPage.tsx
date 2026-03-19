@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'; // Add useCallback import
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import courseService from '../../../services/course.service';
 import { Lesson } from '../../../types/course.types';
@@ -31,8 +31,8 @@ const MainsGSPaperLessonsPage: React.FC<MainsGSPaperLessonsPageProps> = ({ darkM
     description: ''
   });
 
-  // Define paperData outside component or use useMemo
-  const paperData = {
+  // Use useMemo to prevent paperData from changing on every render
+  const paperData = useMemo(() => ({
     'gs-paper-1': {
       title: 'GS Paper I',
       subtitle: 'Indian Heritage, Culture, History & Geography',
@@ -65,7 +65,7 @@ const MainsGSPaperLessonsPage: React.FC<MainsGSPaperLessonsPageProps> = ({ darkM
       description: 'Complete preparation for GS Paper IV',
       lessonIds: [875, 876, 877, 878, 879, 880, 881, 882, 883, 884, 885]
     }
-  };
+  }), []); // Empty dependency array means this never changes
 
   // Wrap checkEnrollment in useCallback
   const checkEnrollment = useCallback(async () => {
@@ -76,27 +76,23 @@ const MainsGSPaperLessonsPage: React.FC<MainsGSPaperLessonsPageProps> = ({ darkM
       console.error('Failed to check enrollment:', error);
       setIsEnrolled(false);
     }
-  }, []); // No dependencies
+  }, []);
 
   // Wrap fetchLessons in useCallback
   const fetchLessons = useCallback(async () => {
     setIsLoading(true);
     try {
-      // Fetch all lessons for course 13
       const allLessons = await courseService.getCourseLessons(13);
       
       if (paperId && paperData[paperId as keyof typeof paperData]) {
         const currentPaper = paperData[paperId as keyof typeof paperData];
         setPaperInfo(currentPaper);
         
-        // Filter lessons by IDs
         const filteredLessons = allLessons.filter(lesson => 
           currentPaper.lessonIds.includes(lesson.id)
         );
         
-        // Sort by ID
         filteredLessons.sort((a, b) => a.id - b.id);
-        
         setLessons(filteredLessons);
       }
       
@@ -105,12 +101,12 @@ const MainsGSPaperLessonsPage: React.FC<MainsGSPaperLessonsPageProps> = ({ darkM
     } finally {
       setIsLoading(false);
     }
-  }, [paperId, paperData]); // Add paperId and paperData as dependencies
+  }, [paperId, paperData]); // paperData is now stable thanks to useMemo
 
   useEffect(() => {
     fetchLessons();
     checkEnrollment();
-  }, [fetchLessons, checkEnrollment]); // Add the functions as dependencies
+  }, [fetchLessons, checkEnrollment]);
 
   const handleStartLesson = (lessonId: number) => {
     navigate(`/courses/13/learn/${lessonId}`);

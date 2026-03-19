@@ -179,41 +179,42 @@ const DSATopicQuizPage: React.FC<DSATopicQuizPageProps> = ({ darkMode, setDarkMo
   }, [navigate]);
 
   // Fetch problems from database
-  useEffect(() => {
-    const fetchData = async () => {
-      if (!topicId) return;
-      
-      setIsLoading(true);
-      try {
-        // Set topic info if valid topic
-        if (topicId in topicMap) {
-          const topic = topicMap[topicId];
-          setTopicInfo({
-            title: topic.title,
-            icon: topic.icon,
-            color: topic.color,
-            description: topic.description
-          });
-          
-          // Fetch video lecture
-          const video = await videoService.getVideoLecture(topic.videoId);
-          setVideoLecture(video);
-        }
-
-        // Fetch problems from database
-        const data = await dsaPracticeService.getProblemsByTopic(topicId);
-        console.log(`📚 Fetched ${data.length} problems for topic: ${topicId}`, data);
-        setProblems(data);
-        setFilteredProblems(data);
-      } catch (error) {
-        console.error('❌ Failed to fetch problems:', error);
-      } finally {
-        setIsLoading(false);
+// Fetch problems from database
+useEffect(() => {
+  const fetchData = async () => {
+    if (!topicId) return;
+    
+    setIsLoading(true);
+    try {
+      // Set topic info if valid topic
+      if (topicId in topicMap) {
+        const topic = topicMap[topicId];
+        setTopicInfo({
+          title: topic.title,
+          icon: topic.icon,
+          color: topic.color,
+          description: topic.description
+        });
+        
+        // Fetch video lecture
+        const video = await videoService.getVideoLecture(topic.videoId);
+        setVideoLecture(video);
       }
-    };
 
-    fetchData();
-  }, [topicId]);
+      // Fetch problems from database
+      const data = await dsaPracticeService.getProblemsByTopic(topicId);
+      console.log(`📚 Fetched ${data.length} problems for topic: ${topicId}`, data);
+      setProblems(data);
+      setFilteredProblems(data);
+    } catch (error) {
+      console.error('❌ Failed to fetch problems:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  fetchData();
+}, [topicId, topicMap]); // Added topicMap to dependencies
 
   // Filter problems based on platform, difficulty, and search
   useEffect(() => {

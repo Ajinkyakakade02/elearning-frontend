@@ -8,11 +8,9 @@ import {
   FaStar,
   FaHeart,
   FaBrain,
-
   FaFileAlt,
   FaRupeeSign,
   FaBalanceScale,
-  
   FaUserGraduate
 } from 'react-icons/fa';
 
@@ -117,7 +115,7 @@ const EthicsSectionsPage: React.FC<EthicsSectionsPageProps> = ({ darkMode, setDa
 
   const totalLessons = sections.reduce((sum, section) => sum + section.lessonCount, 0);
   const totalStudents = sections.reduce((sum, section) => sum + section.students, 0);
-  const avgRating = (sections.reduce((sum, section) => sum + section.rating, 0) / sections.length).toFixed(1);
+  // const avgRating = (sections.reduce((sum, section) => sum + section.rating, 0) / sections.length).toFixed(1); // REMOVED - unused
   const totalBundleValue = sections.length * 99;
 
   return (

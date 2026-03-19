@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import courseService from '../../../services/course.service';
 import { Lesson } from '../../../types/course.types';
@@ -28,8 +28,8 @@ const UPSCTopicLessonsPage: React.FC<UPSCTopicLessonsPageProps> = ({ darkMode, s
     description: ''
   });
 
-  // Define section data outside component or use useMemo
-  const sectionData: Record<string, { title: string; icon: string; color: string; description: string; lessonIds: number[] }> = {
+  // Use useMemo to make sectionData stable
+  const sectionData = useMemo(() => ({
     'prelims-gs': {
       title: 'Prelims GS',
       icon: '📝',
@@ -65,7 +65,7 @@ const UPSCTopicLessonsPage: React.FC<UPSCTopicLessonsPageProps> = ({ darkMode, s
       description: 'Complete Essay & Optional preparation',
       lessonIds: Array.from({ length: 14 }, (_, i) => 904 + i) // 904-917
     }
-  };
+  }), []); // Empty dependency array means this never changes
 
   // Use useCallback to memoize the fetchLessons function
   const fetchLessons = useCallback(async () => {
@@ -73,11 +73,12 @@ const UPSCTopicLessonsPage: React.FC<UPSCTopicLessonsPageProps> = ({ darkMode, s
     try {
       const allLessons = await courseService.getCourseLessons(13);
 
-      if (sectionId && sectionData[sectionId]) {
-        setSectionInfo(sectionData[sectionId]);
+      if (sectionId && sectionData[sectionId as keyof typeof sectionData]) {
+        const currentSection = sectionData[sectionId as keyof typeof sectionData];
+        setSectionInfo(currentSection);
         
         const filteredLessons = allLessons.filter(lesson => 
-          sectionData[sectionId].lessonIds.includes(lesson.id)
+          currentSection.lessonIds.includes(lesson.id)
         );
         
         filteredLessons.sort((a, b) => a.id - b.id);
@@ -89,11 +90,11 @@ const UPSCTopicLessonsPage: React.FC<UPSCTopicLessonsPageProps> = ({ darkMode, s
     } finally {
       setIsLoading(false);
     }
-  }, [sectionId]); // Add sectionId as dependency
+  }, [sectionId, sectionData]); // sectionData is now stable thanks to useMemo
 
   useEffect(() => {
     fetchLessons();
-  }, [fetchLessons]); // Now fetchLessons is stable with useCallback
+  }, [fetchLessons]);
 
   const handleStartLesson = (lessonId: number) => {
     navigate(`/courses/13/learn/${lessonId}`);

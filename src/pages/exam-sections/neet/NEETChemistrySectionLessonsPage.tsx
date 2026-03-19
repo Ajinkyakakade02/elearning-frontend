@@ -35,6 +35,8 @@ const NEETChemistrySectionLessonsPage: React.FC<NEETChemistrySectionLessonsPageP
     lessonIds: [] as number[]
   });
 
+
+  
   // ✅ Wrap checkEnrollment in useCallback
   const checkEnrollment = useCallback(async () => {
     try {

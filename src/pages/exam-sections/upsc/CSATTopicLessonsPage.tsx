@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import courseService from '../../../services/course.service';
 import { Lesson } from '../../../types/course.types';
@@ -30,16 +30,8 @@ const CSATTopicLessonsPage: React.FC<CSATTopicLessonsPageProps> = ({ darkMode, s
     description: ''
   });
 
- useEffect(() => {
-  const loadData = async () => {
-    await fetchLessons();
-    await checkEnrollment();
-  };
-  
-  loadData();
-}, [topicId]); // Only topicId is needed as dependency
-
-  const checkEnrollment = async () => {
+  // Wrap checkEnrollment in useCallback
+  const checkEnrollment = useCallback(async () => {
     try {
       const enrolled = await courseService.checkEnrollment(13);
       setIsEnrolled(enrolled);
@@ -47,50 +39,51 @@ const CSATTopicLessonsPage: React.FC<CSATTopicLessonsPageProps> = ({ darkMode, s
       console.error('Failed to check enrollment:', error);
       setIsEnrolled(false);
     }
-  };
+  }, []); // No dependencies
 
-  const fetchLessons = async () => {
+  // Wrap fetchLessons in useCallback
+  const fetchLessons = useCallback(async () => {
     setIsLoading(true);
     try {
       // Fetch all lessons for course 13
       const allLessons = await courseService.getCourseLessons(13);
       
       // Define topic info and lesson ranges for CSAT (IDs 829-840)
-      const topicData: any = {
+      const topicData: Record<string, { title: string; icon: string; color: string; description: string; lessonIds: number[] }> = {
         'comprehension': {
           title: 'Reading Comprehension',
           icon: '📖',
           color: '#3b82f6',
           description: 'Master reading comprehension for CSAT Paper II',
-          lessonIds: [829, 830] // Comprehension Part 1 & 2
+          lessonIds: [829, 830]
         },
         'logical-reasoning': {
           title: 'Logical Reasoning',
           icon: '🧩',
           color: '#10b981',
           description: 'Complete logical reasoning for CSAT',
-          lessonIds: [831, 832, 833, 834] // Syllogisms, Puzzles, Blood Relations, Directions
+          lessonIds: [831, 832, 833, 834]
         },
         'quantitative-aptitude': {
           title: 'Quantitative Aptitude',
           icon: '🧮',
           color: '#f59e0b',
           description: 'Complete quantitative aptitude for CSAT',
-          lessonIds: [835, 836, 837] // Percentages, Ratio, Time & Work
+          lessonIds: [835, 836, 837]
         },
         'data-interpretation': {
           title: 'Data Interpretation',
           icon: '📊',
           color: '#8b5cf6',
           description: 'Master data interpretation for CSAT',
-          lessonIds: [838, 839] // Tables & Graphs, Pie Charts
+          lessonIds: [838, 839]
         },
         'decision-making': {
           title: 'Decision Making',
           icon: '⚖️',
           color: '#ec4899',
           description: 'Master decision making for CSAT',
-          lessonIds: [840] // Decision Making
+          lessonIds: [840]
         }
       };
 
@@ -113,7 +106,17 @@ const CSATTopicLessonsPage: React.FC<CSATTopicLessonsPageProps> = ({ darkMode, s
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [topicId]); // topicId is the only dependency
+
+  // useEffect with proper dependencies
+  useEffect(() => {
+    const loadData = async () => {
+      await fetchLessons();
+      await checkEnrollment();
+    };
+    
+    loadData();
+  }, [fetchLessons, checkEnrollment]); // Both functions are now stable with useCallback
 
   const handleStartLesson = (lessonId: number) => {
     navigate(`/courses/13/learn/${lessonId}`);

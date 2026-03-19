@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import courseService from '../../services/course.service';
@@ -234,71 +234,71 @@ const isPreviewLesson = (lesson: Lesson | null): boolean => {
 };
 
   // Filter lessons based on current lesson's subject
-  const getFilteredLessons = (allLessons: Lesson[], currentLessonId: number): Lesson[] => {
-    const subject = getSubjectFromLessonId(currentLessonId);
+  const getFilteredLessons = useCallback((allLessons: Lesson[], currentLessonId: number): Lesson[] => {
+  const subject = getSubjectFromLessonId(currentLessonId);
+  
+  // For course 4 (Arrays), return all lessons
+  if (Number(courseId) === 4) {
+    return allLessons;
+  }
+  
+  return allLessons.filter(lesson => {
+    // DSA (Course 22)
+    if (subject === 'dsa') return lesson.id >= 2201 && lesson.id <= 2215;
     
-    // For course 4 (Arrays), return all lessons
-    if (Number(courseId) === 4) {
-      return allLessons;
-    }
+    // MHT CET Physics
+    if (subject === 'mhtcet-physics') return lesson.id >= 1801 && lesson.id <= 1825;
     
-    return allLessons.filter(lesson => {
-      // DSA (Course 22)
-      if (subject === 'dsa') return lesson.id >= 2201 && lesson.id <= 2215;
-      
-      // MHT CET Physics
-      if (subject === 'mhtcet-physics') return lesson.id >= 1801 && lesson.id <= 1825;
-      
-      // MHT CET Chemistry
-      if (subject === 'mhtcet-physical-chemistry') return lesson.id >= 1901 && lesson.id <= 1908;
-      if (subject === 'mhtcet-inorganic-chemistry') return lesson.id >= 1909 && lesson.id <= 1915;
-      if (subject === 'mhtcet-organic-chemistry') return lesson.id >= 1916 && lesson.id <= 1924;
-      
-      // MHT CET Biology
-      if (subject === 'mhtcet-botany') return lesson.id >= 2101 && lesson.id <= 2108;
-      if (subject === 'mhtcet-zoology') return lesson.id >= 2109 && lesson.id <= 2117;
-      if (subject === 'mhtcet-biotech') return lesson.id >= 2118 && lesson.id <= 2127;
-      
-      // MHT CET Mathematics
-      if (subject === 'mhtcet-mathematics') return lesson.id >= 2001 && lesson.id <= 2024;
-      
-      if (subject === 'physical-chemistry') return lesson.id >= 96 && lesson.id <= 108;
-      if (subject === 'inorganic-chemistry') return lesson.id >= 109 && lesson.id <= 119;
-      if (subject === 'organic-chemistry') return lesson.id >= 120 && lesson.id <= 123;
-      if (subject === 'jee-mathematics') return lesson.id >= 124 && lesson.id <= 152;
-      if (subject === 'jee-physics') return lesson.id >= 153 && lesson.id <= 178;
-      if (subject === 'botany') return lesson.id >= 501 && lesson.id <= 510;
-      if (subject === 'zoology') return lesson.id >= 511 && lesson.id <= 524;
-      if (subject === 'biotech-genetics') return lesson.id >= 525 && lesson.id <= 537;
-      if (subject === 'neet-physics') return lesson.id >= 601 && lesson.id <= 610;
-      if (subject === 'neet-physical-chemistry') return lesson.id >= 701 && lesson.id <= 706;
-      if (subject === 'neet-inorganic-chemistry') return lesson.id >= 707 && lesson.id <= 715;
-      if (subject === 'neet-organic-chemistry') return lesson.id >= 716 && lesson.id <= 724;
-      if (subject === 'indian-history') return lesson.id >= 801 && lesson.id <= 810;
-      if (subject === 'indian-geography') return lesson.id >= 811 && lesson.id <= 815;
-      if (subject === 'indian-polity') return lesson.id >= 816 && lesson.id <= 820;
-      if (subject === 'indian-economy') return lesson.id >= 821 && lesson.id <= 823;
-      if (subject === 'environment') return lesson.id >= 824 && lesson.id <= 826;
-      if (subject === 'general-science') return lesson.id >= 827 && lesson.id <= 828;
-      if (subject === 'comprehension') return lesson.id >= 829 && lesson.id <= 830;
-      if (subject === 'logical-reasoning') return lesson.id >= 831 && lesson.id <= 834;
-      if (subject === 'quantitative-aptitude') return lesson.id >= 835 && lesson.id <= 837;
-      if (subject === 'data-interpretation') return lesson.id >= 838 && lesson.id <= 839;
-      if (subject === 'decision-making') return lesson.id === 840;
-      if (subject === 'gs-paper-1') return lesson.id >= 841 && lesson.id <= 852;
-      if (subject === 'gs-paper-2') return lesson.id >= 853 && lesson.id <= 863;
-      if (subject === 'gs-paper-3') return lesson.id >= 864 && lesson.id <= 874;
-      if (subject === 'gs-paper-4') return lesson.id >= 875 && lesson.id <= 885;
-      if (subject === 'ethics-basics') return lesson.id >= 886 && lesson.id <= 889;
-      if (subject === 'attitude-ei') return lesson.id >= 890 && lesson.id <= 893;
-      if (subject === 'moral-thinkers') return lesson.id >= 894 && lesson.id <= 896;
-      if (subject === 'probity') return lesson.id >= 897 && lesson.id <= 899;
-      if (subject === 'case-studies') return lesson.id >= 900 && lesson.id <= 903;
-      if (subject === 'essay-writing') return lesson.id >= 904 && lesson.id <= 910;
-      if (subject === 'optional-subject') return lesson.id >= 911 && lesson.id <= 917;
-      return false;
-    });
-  };
+    // MHT CET Chemistry
+    if (subject === 'mhtcet-physical-chemistry') return lesson.id >= 1901 && lesson.id <= 1908;
+    if (subject === 'mhtcet-inorganic-chemistry') return lesson.id >= 1909 && lesson.id <= 1915;
+    if (subject === 'mhtcet-organic-chemistry') return lesson.id >= 1916 && lesson.id <= 1924;
+    
+    // MHT CET Biology
+    if (subject === 'mhtcet-botany') return lesson.id >= 2101 && lesson.id <= 2108;
+    if (subject === 'mhtcet-zoology') return lesson.id >= 2109 && lesson.id <= 2117;
+    if (subject === 'mhtcet-biotech') return lesson.id >= 2118 && lesson.id <= 2127;
+    
+    // MHT CET Mathematics
+    if (subject === 'mhtcet-mathematics') return lesson.id >= 2001 && lesson.id <= 2024;
+    
+    if (subject === 'physical-chemistry') return lesson.id >= 96 && lesson.id <= 108;
+    if (subject === 'inorganic-chemistry') return lesson.id >= 109 && lesson.id <= 119;
+    if (subject === 'organic-chemistry') return lesson.id >= 120 && lesson.id <= 123;
+    if (subject === 'jee-mathematics') return lesson.id >= 124 && lesson.id <= 152;
+    if (subject === 'jee-physics') return lesson.id >= 153 && lesson.id <= 178;
+    if (subject === 'botany') return lesson.id >= 501 && lesson.id <= 510;
+    if (subject === 'zoology') return lesson.id >= 511 && lesson.id <= 524;
+    if (subject === 'biotech-genetics') return lesson.id >= 525 && lesson.id <= 537;
+    if (subject === 'neet-physics') return lesson.id >= 601 && lesson.id <= 610;
+    if (subject === 'neet-physical-chemistry') return lesson.id >= 701 && lesson.id <= 706;
+    if (subject === 'neet-inorganic-chemistry') return lesson.id >= 707 && lesson.id <= 715;
+    if (subject === 'neet-organic-chemistry') return lesson.id >= 716 && lesson.id <= 724;
+    if (subject === 'indian-history') return lesson.id >= 801 && lesson.id <= 810;
+    if (subject === 'indian-geography') return lesson.id >= 811 && lesson.id <= 815;
+    if (subject === 'indian-polity') return lesson.id >= 816 && lesson.id <= 820;
+    if (subject === 'indian-economy') return lesson.id >= 821 && lesson.id <= 823;
+    if (subject === 'environment') return lesson.id >= 824 && lesson.id <= 826;
+    if (subject === 'general-science') return lesson.id >= 827 && lesson.id <= 828;
+    if (subject === 'comprehension') return lesson.id >= 829 && lesson.id <= 830;
+    if (subject === 'logical-reasoning') return lesson.id >= 831 && lesson.id <= 834;
+    if (subject === 'quantitative-aptitude') return lesson.id >= 835 && lesson.id <= 837;
+    if (subject === 'data-interpretation') return lesson.id >= 838 && lesson.id <= 839;
+    if (subject === 'decision-making') return lesson.id === 840;
+    if (subject === 'gs-paper-1') return lesson.id >= 841 && lesson.id <= 852;
+    if (subject === 'gs-paper-2') return lesson.id >= 853 && lesson.id <= 863;
+    if (subject === 'gs-paper-3') return lesson.id >= 864 && lesson.id <= 874;
+    if (subject === 'gs-paper-4') return lesson.id >= 875 && lesson.id <= 885;
+    if (subject === 'ethics-basics') return lesson.id >= 886 && lesson.id <= 889;
+    if (subject === 'attitude-ei') return lesson.id >= 890 && lesson.id <= 893;
+    if (subject === 'moral-thinkers') return lesson.id >= 894 && lesson.id <= 896;
+    if (subject === 'probity') return lesson.id >= 897 && lesson.id <= 899;
+    if (subject === 'case-studies') return lesson.id >= 900 && lesson.id <= 903;
+    if (subject === 'essay-writing') return lesson.id >= 904 && lesson.id <= 910;
+    if (subject === 'optional-subject') return lesson.id >= 911 && lesson.id <= 917;
+    return false;
+  });
+}, [courseId]);
 
   useEffect(() => {
     if (fetchInProgress.current) return;
@@ -380,10 +380,10 @@ const isPreviewLesson = (lesson: Lesson | null): boolean => {
 
     fetchData();
 
-    return () => {
-      fetchInProgress.current = false;
-    };
-  }, [courseId, lessonId, isAuthenticated]);
+   return () => {
+    fetchInProgress.current = false;
+  };
+}, [courseId, lessonId, isAuthenticated, getFilteredLessons]);
 
   const checkForQuiz = async (lessonId: number) => {
     setCheckingQuiz(true);

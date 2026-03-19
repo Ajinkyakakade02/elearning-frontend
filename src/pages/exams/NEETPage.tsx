@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import courseService from '../../services/course.service';
 import { Course } from '../../types/course.types';
@@ -34,57 +34,38 @@ const NEETPage: React.FC<NEETPageProps> = ({ darkMode, setDarkMode }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState<string>('all');
 
-  // NEET course IDs from your database
-  const NEET_COURSE_IDS = [10, 11, 12]; // Biology (10), Physics (11), Chemistry (12)
+  // Use useMemo to prevent NEET_COURSE_IDS from changing on every render
+  const NEET_COURSE_IDS = useMemo(() => [10, 11, 12], []); // Biology (10), Physics (11), Chemistry (12)
 
   const fetchNEETCourses = useCallback(async () => {
     setIsLoading(true);
     try {
-      console.log('📡 Fetching all courses...');
       const allCourses = await courseService.getAllCourses();
-      console.log('✅ All courses received:', allCourses);
-      
-      // Log all course IDs for debugging (console only)
-      const courseIds = allCourses.map(c => c.id);
-      console.log('Course IDs in database:', courseIds);
-      
-      // Log details of courses with IDs 10, 11, 12
-      const neetCourses = allCourses.filter(c => [10, 11, 12].includes(c.id));
-      console.log('🔍 NEET courses (IDs 10,11,12):', neetCourses);
-      
-      if (neetCourses.length === 0) {
-        console.warn('⚠️ No courses found with IDs 10, 11, 12');
-        console.log('Available courses:', allCourses.map(c => ({ id: c.id, title: c.title })));
-      }
+      console.log('All courses:', allCourses);
       
       // Filter by known NEET course IDs
       const filtered = allCourses.filter(course => 
         NEET_COURSE_IDS.includes(course.id)
       );
       
-      console.log('🎯 Filtered NEET courses:', filtered);
+      console.log('Filtered NEET courses:', filtered);
       
-      // Force all courses to ₹99 and ensure they have proper structure
+      // Force all courses to ₹99
       const coursesWithPrice = filtered.map(course => ({
         ...course,
-        price: 99,
-        // Ensure these fields exist
-        totalLessons: course.totalLessons || getLessonCountForCourse(course.id),
-        durationHours: course.durationHours || 0,
-        totalStudents: course.totalStudents || Math.floor(Math.random() * 5000) + 1000,
-        rating: course.rating || 4.5,
-        level: course.level || 'Beginner',
-        instructorName: course.instructorName || 'Expert NEET Faculty'
+        price: 99
       }));
       
       setCourses(coursesWithPrice);
       setFilteredCourses(coursesWithPrice);
     } catch (error) {
-      console.error('❌ Failed to fetch NEET courses:', error);
+      console.error('Failed to fetch NEET courses:', error);
     } finally {
       setIsLoading(false);
     }
-  }, [NEET_COURSE_IDS]); // Added dependency
+  }, [NEET_COURSE_IDS]); // NEET_COURSE_IDS is now stable thanks to useMemo
+
+  // ... rest of your component code remains the same
 
   // Helper function to get lesson count based on course ID
   const getLessonCountForCourse = (courseId: number): number => {

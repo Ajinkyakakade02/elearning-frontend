@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import courseService from '../../services/course.service';
 import { Course } from '../../types/course.types';
@@ -19,7 +19,7 @@ import {
   FaSeedling,
   FaChartBar,
   FaRocket,
-  FaPen,
+  FaPen
 } from 'react-icons/fa';
 
 interface MHTCETPageProps {
@@ -35,8 +35,8 @@ const MHTCETPage: React.FC<MHTCETPageProps> = ({ darkMode, setDarkMode }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState<string>('all');
 
-  // MHT CET course IDs from your database
-  const MHTCET_COURSE_IDS = [18, 19, 20, 21]; // Physics (18), Chemistry (19), Maths (20), Biology (21)
+  // Use useMemo to prevent MHTCET_COURSE_IDS from changing on every render
+  const MHTCET_COURSE_IDS = useMemo(() => [18, 19, 20, 21], []); // Physics (18), Chemistry (19), Maths (20), Biology (21)
 
   const fetchMHTCETCourses = useCallback(async () => {
     setIsLoading(true);
@@ -64,7 +64,9 @@ const MHTCETPage: React.FC<MHTCETPageProps> = ({ darkMode, setDarkMode }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [MHTCET_COURSE_IDS]); // Added dependency
+  }, [MHTCET_COURSE_IDS]); // MHTCET_COURSE_IDS is now stable thanks to useMemo
+
+  // ... rest of your component code remains the same
 
   useEffect(() => {
     fetchMHTCETCourses();

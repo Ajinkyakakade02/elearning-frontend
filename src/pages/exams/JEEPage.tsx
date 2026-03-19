@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import courseService from '../../services/course.service';
 import { Course } from '../../types/course.types';
@@ -34,8 +34,8 @@ const JEEPage: React.FC<JEEPageProps> = ({ darkMode, setDarkMode }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState<string>('all');
 
-  // Known JEE course IDs from your database
-  const JEE_COURSE_IDS = [7, 8, 9]; // 7: Maths, 8: Physics, 9: Chemistry
+  // Use useMemo to prevent JEE_COURSE_IDS from changing on every render
+  const JEE_COURSE_IDS = useMemo(() => [7, 8, 9], []); // 7: Maths, 8: Physics, 9: Chemistry
 
   const fetchJEECourses = useCallback(async () => {
     setIsLoading(true);
@@ -63,7 +63,9 @@ const JEEPage: React.FC<JEEPageProps> = ({ darkMode, setDarkMode }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [JEE_COURSE_IDS]); // Added dependency
+  }, [JEE_COURSE_IDS]); // JEE_COURSE_IDS is now stable thanks to useMemo
+
+  // ... rest of your component code remains the same
 
   useEffect(() => {
     fetchJEECourses();

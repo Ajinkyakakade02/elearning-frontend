@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import courseService from '../../services/course.service';
 import { Course } from '../../types/course.types';
@@ -38,8 +38,8 @@ const UPSCPage: React.FC<UPSCPageProps> = ({ darkMode, setDarkMode }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState<string>('all');
 
-  // UPSC course ID from your database
-  const UPSC_COURSE_IDS = [13]; // Complete UPSC course
+  // Use useMemo to prevent UPSC_COURSE_IDS from changing on every render
+  const UPSC_COURSE_IDS = useMemo(() => [13], []); // Complete UPSC course
 
   const fetchUPSCCourses = useCallback(async () => {
     setIsLoading(true);
@@ -67,7 +67,9 @@ const UPSCPage: React.FC<UPSCPageProps> = ({ darkMode, setDarkMode }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [UPSC_COURSE_IDS]); // Added dependency
+  }, [UPSC_COURSE_IDS]); // UPSC_COURSE_IDS is now stable thanks to useMemo
+
+  // ... rest of your component code remains the same
 
   useEffect(() => {
     fetchUPSCCourses();

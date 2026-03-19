@@ -44,47 +44,48 @@ const DSASheetPage: React.FC<DSASheetPageProps> = ({ darkMode, setDarkMode }) =>
   const [sections, setSections] = useState<Section[]>([]);
   const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([]);
 
-  // Define section structure
-  const sectionDefinitions = [
-    {
-      id: 'patterns',
-      title: 'All DSA Patterns',
-      icon: <FaCode />,
-      color: '#6366f1',
-      description: 'Comprehensive collection of questions organized by DSA patterns',
-      price: 99,
-      quizPath: '/quiz/1',
-      topicFilter: 'pattern',
-    },
-    {
-      id: 'top150',
-      title: 'Top 150 Interview Questions',
-      icon: <FaStar />,
-      color: '#f59e0b',
-      description: 'Most frequently asked interview questions from LeetCode Top 150',
-      price: 99,
-      quizPath: '/quiz/1',
-      topicFilter: 'top',
-    },
-    {
-      id: 'top75',
-      title: 'Blind 75 - Top Questions',
-      icon: <FaAward />,
-      color: '#10b981',
-      description: 'The famous Blind 75 list - must-do questions for coding interviews',
-      price: 99,
-      quizPath: '/quiz/1',
-      topicFilter: 'blind',
-    }
-  ];
-
   // Fetch questions from database - wrapped in useCallback
   const fetchAllQuestions = useCallback(async () => {
+    // Define sectionDefinitions INSIDE the callback to avoid dependency issues
+    const sectionDefinitions = [
+      {
+        id: 'patterns',
+        title: 'All DSA Patterns',
+        icon: <FaCode />,
+        color: '#6366f1',
+        description: 'Comprehensive collection of questions organized by DSA patterns',
+        price: 99,
+        quizPath: '/quiz/1',
+        topicFilter: 'pattern',
+      },
+      {
+        id: 'top150',
+        title: 'Top 150 Interview Questions',
+        icon: <FaStar />,
+        color: '#f59e0b',
+        description: 'Most frequently asked interview questions from LeetCode Top 150',
+        price: 99,
+        quizPath: '/quiz/1',
+        topicFilter: 'top',
+      },
+      {
+        id: 'top75',
+        title: 'Blind 75 - Top Questions',
+        icon: <FaAward />,
+        color: '#10b981',
+        description: 'The famous Blind 75 list - must-do questions for coding interviews',
+        price: 99,
+        quizPath: '/quiz/1',
+        topicFilter: 'blind',
+      }
+    ];
+
     setIsLoading(true);
     try {
       const allQuestions = await questionService.getAllQuestions();
       console.log('📚 Fetched all questions:', allQuestions.length);
 
+      // Filter questions based on ID ranges and patterns
       const patternQuestions = allQuestions.filter(q => 
         q.questionId?.includes('pattern') || 
         (q.id >= 7301 && q.id <= 7358)
@@ -129,9 +130,9 @@ const DSASheetPage: React.FC<DSASheetPageProps> = ({ darkMode, setDarkMode }) =>
     } finally {
       setIsLoading(false);
     }
-  }, [activeSection]); // Add activeSection as dependency
+  }, [activeSection]); // Only depend on activeSection
 
-  // Fetch questions on mount
+  // Call fetchAllQuestions when component mounts
   useEffect(() => {
     fetchAllQuestions();
   }, [fetchAllQuestions]);
@@ -169,16 +170,6 @@ const DSASheetPage: React.FC<DSASheetPageProps> = ({ darkMode, setDarkMode }) =>
       setDifficultyFilter('all');
     }
   };
-
-  // REMOVED: getDifficultyColor is not used anywhere
-  // const getDifficultyColor = (difficulty: string) => {
-  //   switch(difficulty?.toLowerCase()) {
-  //     case 'easy': return '#10b981';
-  //     case 'medium': return '#f59e0b';
-  //     case 'hard': return '#ef4444';
-  //     default: return '#6b7280';
-  //   }
-  // };
 
   const getDifficultyBgColor = (difficulty: string) => {
     switch(difficulty?.toLowerCase()) {

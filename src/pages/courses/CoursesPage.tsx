@@ -153,7 +153,7 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ darkMode, setDarkMode }) => {
         courseService.storeEnrollmentLocally(courseId);
         showToast.success('✅ Successfully enrolled in free course!');
       } else {
-        const enrollment = await courseService.enrollInCourse(courseId);
+        await courseService.enrollInCourse(courseId);
         
         setEnrolledCourses(prev => {
           const newSet = new Set(prev);
@@ -238,14 +238,15 @@ const CoursesPage: React.FC<CoursesPageProps> = ({ darkMode, setDarkMode }) => {
     }
   };
 
-  const getLevelColor = (level: string) => {
-    switch(level?.toLowerCase()) {
-      case 'beginner': return '#10b981';
-      case 'intermediate': return '#f59e0b';
-      case 'advanced': return '#ef4444';
-      default: return '#6b7280';
-    }
-  };
+  // REMOVED: getLevelColor is not used
+  // const getLevelColor = (level: string) => {
+  //   switch(level?.toLowerCase()) {
+  //     case 'beginner': return '#10b981';
+  //     case 'intermediate': return '#f59e0b';
+  //     case 'advanced': return '#ef4444';
+  //     default: return '#6b7280';
+  //   }
+  // };
 
   const getLevelBgColor = (level: string) => {
     switch(level?.toLowerCase()) {

@@ -101,7 +101,7 @@ const DSAPage: React.FC<DSAPageProps> = ({ darkMode, setDarkMode }) => {
     }
   ];
 
-  // 👈 NEW: DSA Complete Course data
+  // DSA Complete Course data
   const dsaCompleteCourse = {
     id: 22,
     title: 'DSA Complete Course',
@@ -118,7 +118,8 @@ const DSAPage: React.FC<DSAPageProps> = ({ darkMode, setDarkMode }) => {
 
   const totalLessons = dsaTopics.reduce((sum, topic) => sum + topic.lessonCount, 0) + dsaCompleteCourse.lessonCount;
   const totalStudents = dsaTopics.reduce((sum, topic) => sum + topic.students, 0) + dsaCompleteCourse.students;
-  const avgRating = ((dsaTopics.reduce((sum, topic) => sum + topic.rating, 0) + dsaCompleteCourse.rating) / (dsaTopics.length + 1)).toFixed(1);
+  // REMOVED: avgRating is not used anywhere
+  // const avgRating = ((dsaTopics.reduce((sum, topic) => sum + topic.rating, 0) + dsaCompleteCourse.rating) / (dsaTopics.length + 1)).toFixed(1);
   const totalBundleValue = (dsaTopics.length + 1) * 99;
 
   // Handle back navigation to dashboard
@@ -200,7 +201,7 @@ const DSAPage: React.FC<DSAPageProps> = ({ darkMode, setDarkMode }) => {
           <span className="font-semibold">All DSA topics at just ₹99/- each! Limited time offer.</span>
         </div>
 
-        {/* DSA Complete Course Card - NEW */}
+        {/* DSA Complete Course Card */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-4">Complete Course</h2>
           <Link

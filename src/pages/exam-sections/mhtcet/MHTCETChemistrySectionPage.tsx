@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import courseService from '../../../services/course.service';
-import { showToast } from '../../../utils/toast';
+// import { showToast } from '../../../utils/toast';
 import { Lesson } from '../../../types/course.types';
 import { 
   FaArrowLeft, 
