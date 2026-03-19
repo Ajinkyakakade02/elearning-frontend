@@ -119,18 +119,19 @@ import './App.css';
 import './index.css';
 
 // Layout component that wraps all pages with Header and Footer
-const PageLayout: React.FC<{ children: React.ReactNode; darkMode: boolean; setDarkMode: (value: boolean) => void }> = ({ 
+const PageLayout: React.FC<{ children: React.ReactNode; darkMode: boolean; setDarkMode: (value: boolean) => void; showNavbar?: boolean }> = ({ 
   children, 
   darkMode, 
-  setDarkMode 
+  setDarkMode,
+  showNavbar = true
 }) => {
   return (
     <>
-      <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />
+      {showNavbar && <Navbar darkMode={darkMode} setDarkMode={setDarkMode} />}
       <main className="main-content">
         {children}
       </main>
-      <Footer darkMode={darkMode} />
+      {showNavbar && <Footer darkMode={darkMode} />}
     </>
   );
 };
@@ -177,27 +178,25 @@ function App() {
           
           <div className={`app ${darkMode ? 'dark' : 'light'}`}>
             <Routes>
-              {/* ===== GITHUB PAGES BASE PATH REDIRECT ===== */}
-              <Route path="/e-learning-platform" element={<Navigate to="/login" replace />} />
+              {/* ===== PUBLIC ROUTES - Login is the default landing page ===== */}
+              <Route path="/" element={<Navigate to="/login" replace />} />
               
-              {/* ===== PUBLIC ROUTES ===== */}
               <Route path="/login" element={
-                <PageLayout darkMode={darkMode} setDarkMode={setDarkMode}>
+                <PageLayout darkMode={darkMode} setDarkMode={setDarkMode} showNavbar={false}>
                   <LoginPage darkMode={darkMode} setDarkMode={setDarkMode} />
                 </PageLayout>
               } />
               
               <Route path="/forgot-password" element={
-                <PageLayout darkMode={darkMode} setDarkMode={setDarkMode}>
+                <PageLayout darkMode={darkMode} setDarkMode={setDarkMode} showNavbar={false}>
                   <ForgotPasswordPage darkMode={darkMode} setDarkMode={setDarkMode} />
                 </PageLayout>
               } />
               
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/auth/google/callback" element={<OAuthCallbackPage />} />
               <Route path="/auth/github/callback" element={<OAuthCallbackPage />} />
 
-              {/* ===== PROTECTED USER ROUTES ===== */}
+              {/* ===== PROTECTED USER ROUTES - Only accessible after login ===== */}
               <Route path="/dashboard" element={
                 <ProtectedRoute>
                   <PageLayout darkMode={darkMode} setDarkMode={setDarkMode}>
@@ -826,10 +825,10 @@ function App() {
                       The page you're looking for doesn't exist or has been moved.
                     </p>
                     <button 
-                      onClick={() => window.location.href = '/dashboard'}
+                      onClick={() => window.location.href = '/login'}
                       className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all"
                     >
-                      Go to Dashboard
+                      Go to Login
                     </button>
                   </div>
                 </PageLayout>

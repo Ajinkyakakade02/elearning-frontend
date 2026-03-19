@@ -1,10 +1,9 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaChartLine, FaRupeeSign } from 'react-icons/fa';
+import { FaArrowLeft, FaChartLine } from 'react-icons/fa';
 import UserProgressStats from '../../components/user/UserProgressStats';
 import QuizHistory from '../../components/user/QuizHistory';
 import { useAuth } from '../../hooks/useAuth';
-import { paymentService } from '../../services/payment.service';
 
 interface ProgressPageProps {
   darkMode: boolean;
@@ -15,34 +14,11 @@ const ProgressPage: React.FC<ProgressPageProps> = ({ darkMode, setDarkMode }) =>
   const navigate = useNavigate();
   const { user } = useAuth();
   const [timeframe, setTimeframe] = useState<'week' | 'month' | 'all'>('all');
-  const [totalSpent, setTotalSpent] = useState(0);
-  const [purchasedCount, setPurchasedCount] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch user's purchase summary
-    const fetchPurchaseSummary = async () => {
-      setLoading(true);
-      if (user) {
-        try {
-          // Try to get real data from API
-          const summary = await paymentService.getPurchaseSummary();
-          setTotalSpent(summary.totalSpent);
-          setPurchasedCount(summary.courseCount + summary.quizCount);
-        } catch (error) {
-          console.error('Failed to fetch purchases:', error);
-          // Fallback to mock data for development
-          setTotalSpent(3 * 99); // Assume 3 courses purchased
-          setPurchasedCount(3);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setLoading(false);
-      }
-    };
-    
-    fetchPurchaseSummary();
+    // Just set loading to false since we removed payment
+    setLoading(false);
   }, [user]);
 
   const handleBackToDashboard = useCallback(() => {
@@ -80,29 +56,7 @@ const ProgressPage: React.FC<ProgressPageProps> = ({ darkMode, setDarkMode }) =>
           <p className="text-gray-600 dark:text-gray-300">Track your learning journey and quiz performance</p>
         </div>
 
-        {/* Purchase Summary Card */}
-        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <div className="text-center">
-              <p className="text-sm text-gray-600 dark:text-gray-300 mb-1">Courses Purchased</p>
-              <p className="text-2xl font-bold text-gray-800 dark:text-white">
-                {loading ? '...' : purchasedCount}
-              </p>
-            </div>
-            <div className="text-center">
-              <p className="text-sm text-gray-600 dark:text-gray-300 mb-1">Total Investment</p>
-              <p className="text-2xl font-bold text-green-600 dark:text-green-400 flex items-center justify-center">
-                <FaRupeeSign className="text-xl" /> {loading ? '...' : totalSpent}/-
-              </p>
-            </div>
-            <div className="text-center">
-              <p className="text-sm text-gray-600 dark:text-gray-300 mb-1">Avg. per Course</p>
-              <p className="text-2xl font-bold text-purple-600 dark:text-purple-400 flex items-center justify-center">
-                <FaRupeeSign className="text-xl" /> 99/-
-              </p>
-            </div>
-          </div>
-        </div>
+        {/* REMOVED Purchase Summary Card */}
 
         {/* Timeframe Filter */}
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 mb-8">

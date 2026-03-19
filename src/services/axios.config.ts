@@ -39,7 +39,7 @@ const processQueue = (error: any, token: string | null = null) => {
 // Function to refresh token
 const refreshToken = async (): Promise<string | null> => {
   try {
-    console.log('Attempting to refresh token...');
+    console.log('🔄 Attempting to refresh token...');
     
     const response = await axios.post(`${baseURL}/auth/refresh`, {}, {
       headers: {
@@ -52,13 +52,13 @@ const refreshToken = async (): Promise<string | null> => {
     const user = tokenManager.getUser();
     if (user && token) {
       tokenManager.setToken(token, user);
-      console.log('Token refreshed successfully');
+      console.log('✅ Token refreshed successfully');
       return token;
     }
     
     return null;
   } catch (error) {
-    console.error('Token refresh failed:', error);
+    console.error('❌ Token refresh failed:', error);
     tokenManager.clearToken();
     return null;
   }
@@ -73,9 +73,9 @@ axiosInstance.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
     
-    // Don't log in production
+    // Log in development
     if (process.env.NODE_ENV === 'development') {
-      console.log(`📡 ${config.method?.toUpperCase()} ${config.url}`);
+      console.log(`📡 ${config.method?.toUpperCase()} ${config.baseURL}${config.url}`);
     }
     
     return config;
@@ -88,6 +88,10 @@ axiosInstance.interceptors.request.use(
 // Response interceptor - FIXED VERSION
 axiosInstance.interceptors.response.use(
   (response: AxiosResponse) => {
+    // Log successful responses in development
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`✅ Response from ${response.config.url}:`, response.status);
+    }
     return response;
   },
   async (error: AxiosError) => {
@@ -97,9 +101,19 @@ axiosInstance.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // Handle 401 Unauthorized errors (token expired)
+    // Log errors in development
+    if (process.env.NODE_ENV === 'development') {
+      console.error('❌ API Error:', {
+        url: originalRequest.url,
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message
+      });
+    }
+
+    // Handle 401 Unauthorized errors (token expired) - BUT NOT FOR LOGIN
     if (error.response?.status === 401 && !originalRequest._retry) {
-      // Don't retry login requests
+      // Don't retry login requests - let them fail with proper error message
       if (originalRequest.url?.includes('/auth/login')) {
         return Promise.reject(error);
       }
@@ -132,7 +146,7 @@ axiosInstance.interceptors.response.use(
           throw new Error('Failed to refresh token');
         }
       } catch (refreshError) {
-        console.error('Token refresh failed:', refreshError);
+        console.error('❌ Token refresh failed:', refreshError);
         processQueue(refreshError, null);
         tokenManager.clearToken();
         
@@ -145,6 +159,15 @@ axiosInstance.interceptors.response.use(
       } finally {
         isRefreshing = false;
       }
+    }
+
+    // Handle network errors
+    if (error.code === 'ECONNABORTED') {
+      return Promise.reject(new Error('Request timeout. Please try again.'));
+    }
+
+    if (error.message === 'Network Error') {
+      return Promise.reject(new Error('Cannot connect to server. Please check if backend is running.'));
     }
 
     return Promise.reject(error);

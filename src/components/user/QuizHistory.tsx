@@ -5,10 +5,10 @@ import {
   FaCheckCircle, 
   FaClock,
   FaPlayCircle,
-  FaRupeeSign
+  // FaRupeeSign  // Remove this if not used elsewhere
 } from 'react-icons/fa';
 import progressService, { QuizAttempt } from '../../services/progress.service';
-import { paymentService } from '../../services/payment.service';
+// REMOVE: import { paymentService } from '../../services/payment.service';
 
 interface QuizHistoryProps {
   limit?: number;
@@ -18,12 +18,12 @@ interface QuizHistoryProps {
 const QuizHistory: React.FC<QuizHistoryProps> = ({ limit = 5, showViewAll = true }) => {
   const [history, setHistory] = useState<QuizAttempt[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [totalSpent, setTotalSpent] = useState(0);
+  // REMOVE: const [totalSpent, setTotalSpent] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchHistory();
-    fetchPurchaseData();
+    // REMOVE: fetchPurchaseData();
   }, []);
 
   const fetchHistory = async () => {
@@ -44,15 +44,8 @@ const QuizHistory: React.FC<QuizHistoryProps> = ({ limit = 5, showViewAll = true
     }
   };
 
-  const fetchPurchaseData = async () => {
-    try {
-      const purchases = await paymentService.getUserPurchases();
-      setTotalSpent(purchases.length * 99);
-    } catch (error) {
-      console.error('Failed to fetch purchase data:', error);
-      setTotalSpent(history.length * 99);
-    }
-  };
+  // REMOVE this entire function:
+  // const fetchPurchaseData = async () => { ... }
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -99,9 +92,7 @@ const QuizHistory: React.FC<QuizHistoryProps> = ({ limit = 5, showViewAll = true
             <h2 className="text-xl font-bold text-gray-800 dark:text-white flex items-center gap-2">
               <FaHistory className="text-blue-600 dark:text-blue-400" /> Recent Quiz Attempts
             </h2>
-            <div className="flex items-center gap-1 px-3 py-1 bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 rounded-full text-sm font-semibold">
-              <FaRupeeSign /> {totalSpent}/-
-            </div>
+            {/* REMOVE the totalSpent badge */}
           </div>
           {showViewAll && history.length > limit && (
             <button 
@@ -114,7 +105,7 @@ const QuizHistory: React.FC<QuizHistoryProps> = ({ limit = 5, showViewAll = true
         </div>
       </div>
 
-      {/* History List */}
+      {/* History List - rest remains the same */}
       {displayedHistory.length === 0 ? (
         <div className="p-12 text-center">
           <p className="text-gray-500 dark:text-gray-400">No quiz attempts yet. Start practicing!</p>

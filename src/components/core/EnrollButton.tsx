@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import courseService from '../../services/course.service';
-import { paymentService } from '../../services/payment.service';
 import { 
   FaRupeeSign, 
   FaPlay, 
@@ -10,7 +9,8 @@ import {
   FaCheckCircle,
   FaInfoCircle,
   FaExclamationCircle,
-  FaTimes
+  FaTimes,
+  FaSpinner
 } from 'react-icons/fa';
 
 interface EnrollButtonProps {
@@ -63,7 +63,7 @@ const EnrollButton: React.FC<EnrollButtonProps> = ({
     setShowConfirm(false);
 
     try {
-      await paymentService.purchaseCourse(courseId, 'CARD');
+      // Direct enrollment without payment
       const enrollment = await courseService.enrollInCourse(courseId);
       
       if (onEnrollmentChange) {
@@ -72,7 +72,7 @@ const EnrollButton: React.FC<EnrollButtonProps> = ({
       
       setMessage({ 
         type: 'success', 
-        text: `✅ Successfully enrolled in "${courseTitle}" for ₹99!` 
+        text: `✅ Successfully enrolled in "${courseTitle}"!` 
       });
 
       if (onEnrollSuccess) {
@@ -119,9 +119,7 @@ const EnrollButton: React.FC<EnrollButtonProps> = ({
       <div className="relative">
         <button
           onClick={handleViewCourse}
-          className={`w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-semibold transition-all group ${
-            variantStyles[variant]
-          } ${isEnrolled ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600' : ''}`}
+          className={`w-full flex items-center justify-center gap-2 py-2 px-4 rounded-lg font-semibold transition-all group bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white`}
         >
           <FaPlay className="text-sm" />
           Continue Learning
@@ -174,11 +172,11 @@ const EnrollButton: React.FC<EnrollButtonProps> = ({
               >
                 {isLoading ? (
                   <span className="flex items-center justify-center gap-2">
-                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    <FaSpinner className="animate-spin" />
                     Processing...
                   </span>
                 ) : (
-                  'Yes, Pay ₹99 & Enroll'
+                  'Yes, Enroll Now'
                 )}
               </button>
               <button 
@@ -203,7 +201,7 @@ const EnrollButton: React.FC<EnrollButtonProps> = ({
       >
         {isLoading ? (
           <>
-            <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></span>
+            <FaSpinner className="animate-spin" />
             Processing...
           </>
         ) : (

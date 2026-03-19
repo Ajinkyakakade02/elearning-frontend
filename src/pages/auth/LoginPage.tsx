@@ -80,25 +80,34 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
     }, duration / steps);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!email || !password) {
-      toast.error('Please fill in all fields');
-      return;
-    }
-    
-    setIsLoading(true);
-    try {
-      await login({ email, password });
-      toast.success('Logged in successfully!');
-      navigate('/dashboard');
-    } catch (error: any) {
-      toast.error(error.message || 'Login failed');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+ const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  
+  if (!email || !password) {
+    toast.error('Please fill in all fields');
+    return;
+  }
+  
+  setIsLoading(true);
+  try {
+    console.log('🔐 Login attempt started for:', email);
+    await login({ email, password });
+    console.log('✅ Login successful, navigating to dashboard');
+    toast.success('Logged in successfully!');
+    navigate('/dashboard');
+  } catch (error: any) {
+    console.error('❌ Login error in component:', error);
+    console.error('Error details:', {
+      message: error.message,
+      stack: error.stack,
+      response: error.response?.data,
+      status: error.response?.status
+    });
+    toast.error(error.message || 'Login failed. Please try again.');
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   const handleGoogleLogin = () => {
     toast.success('Google login coming soon!');

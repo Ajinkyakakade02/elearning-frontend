@@ -5,10 +5,9 @@ import {
   FaClock, 
   FaCheckCircle,
   FaBookOpen,
-  FaRupeeSign
+  FaFire
 } from 'react-icons/fa';
 import progressService, { UserProgress } from '../../services/progress.service';
-import { paymentService } from '../../services/payment.service';
 
 interface UserProgressStatsProps {
   userId?: number;
@@ -18,12 +17,11 @@ const UserProgressStats: React.FC<UserProgressStatsProps> = ({ userId }) => {
   const [progress, setProgress] = useState<UserProgress | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [streak, setStreak] = useState(0);
-  const [totalSpent, setTotalSpent] = useState(0);
-  const [purchasedCount, setPurchasedCount] = useState(0);
+  // REMOVED: totalSpent and purchasedCount state
 
   useEffect(() => {
     fetchProgress();
-    fetchPurchaseData();
+    // REMOVED: fetchPurchaseData();
   }, [userId]);
 
   const fetchProgress = async () => {
@@ -50,18 +48,7 @@ const UserProgressStats: React.FC<UserProgressStatsProps> = ({ userId }) => {
     }
   };
 
-  const fetchPurchaseData = async () => {
-    try {
-      const purchases = await paymentService.getUserPurchases();
-      setPurchasedCount(purchases.length);
-      setTotalSpent(purchases.length * 99);
-    } catch (error) {
-      console.error('Failed to fetch purchase data:', error);
-      // Fallback to mock data
-      setPurchasedCount(3);
-      setTotalSpent(3 * 99);
-    }
-  };
+  // REMOVED: fetchPurchaseData function
 
   // Stat card colors mapping
   const statCardColors = {
@@ -140,11 +127,11 @@ const UserProgressStats: React.FC<UserProgressStatsProps> = ({ userId }) => {
           </div>
         </div>
 
-        {/* Streak */}
+        {/* Streak - replaced emoji with FaFire icon */}
         <div className={`${statCardColors.danger} rounded-xl p-4 text-white shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1`}>
           <div className="flex items-center gap-3">
             <div className="bg-white/20 rounded-lg p-2">
-              <span className="text-2xl">🔥</span>
+              <FaFire className="text-2xl" />
             </div>
             <div>
               <div className="text-2xl font-bold">{streak}</div>
@@ -154,21 +141,7 @@ const UserProgressStats: React.FC<UserProgressStatsProps> = ({ userId }) => {
         </div>
       </div>
 
-      {/* Purchase Summary */}
-      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-4">
-        <div className="flex flex-wrap justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <span className="text-gray-600 dark:text-gray-300">Courses Purchased:</span>
-            <span className="text-xl font-bold text-gray-800 dark:text-white">{purchasedCount}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-gray-600 dark:text-gray-300">Total Investment:</span>
-            <span className="text-xl font-bold text-green-600 dark:text-green-400 flex items-center gap-1">
-              <FaRupeeSign /> {totalSpent}/-
-            </span>
-          </div>
-        </div>
-      </div>
+      {/* REMOVED: Purchase Summary section */}
 
       {/* Detail Row */}
       <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-300 border-t border-gray-200 dark:border-gray-700 pt-4">
