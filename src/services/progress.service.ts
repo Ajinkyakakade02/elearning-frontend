@@ -1,6 +1,5 @@
 import axiosInstance from './axios.config';
 import { tokenManager } from '../utils/tokenManager';
-import { showToast } from '../utils/toast';
 
 export interface QuizAttempt {
   id: number;

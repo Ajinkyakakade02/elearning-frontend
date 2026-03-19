@@ -3,16 +3,9 @@ import axiosInstance from './axios.config';
 import { tokenManager } from '../utils/tokenManager';
 import { showToast } from '../utils/toast';
 
-// Interface for API Response wrapper
-interface ApiResponse<T> {
-  success: boolean;
-  message: string;
-  data: T;
-}
-
 const courseService = {
   // ===== BASIC COURSE METHODS =====
-  
+
   /**
    * Get all published courses
    */

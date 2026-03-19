@@ -1,6 +1,4 @@
-// src/services/question.service.ts
 import axiosInstance from './axios.config';
-import { API_ENDPOINTS } from './api.config';
 
 export interface Question {
   id: number;

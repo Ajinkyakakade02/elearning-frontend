@@ -1,5 +1,4 @@
 import axiosInstance from './axios.config';
-import { Question } from './question.service';
 
 export interface DSAProblem {
   id: number;
