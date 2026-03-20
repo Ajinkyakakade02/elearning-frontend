@@ -18,7 +18,9 @@ import {
   FaExternalLinkAlt,
   FaChartLine,
   FaHome,
-  FaCode 
+  FaCode,
+  FaBars,
+  FaTimes
 } from 'react-icons/fa';
 import { useAuth } from '../../hooks/useAuth';
 import { useNotifications } from '../../context/NotificationContext';
@@ -37,6 +39,7 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onSearch }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showAccount, setShowAccount] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [language, setLanguage] = useState('English');
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
@@ -97,6 +100,7 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onSearch }) => {
 
   // Handle navigation with authentication check
   const handleNavigation = (path: string) => {
+    setIsMobileMenuOpen(false);
     if (user) {
       navigate(path);
     } else {
@@ -136,6 +140,17 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onSearch }) => {
     navigate('/login');
   };
 
+  // Close mobile menu when screen size changes to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // User data for display
   const userData = {
     name: user?.fullName || 'Student',
@@ -159,7 +174,7 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onSearch }) => {
         <div className="flex items-center justify-between h-16">
           
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
+          <Link to="/" className="flex items-center gap-2 group" onClick={() => setIsMobileMenuOpen(false)}>
             <FaBook className="text-2xl text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform" />
             <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
               E-Learn
@@ -169,7 +184,7 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onSearch }) => {
             </span>
           </Link>
 
-          {/* Navigation Buttons - Updated to check authentication */}
+          {/* Desktop Navigation Buttons */}
           <div className="hidden md:flex items-center gap-2 mx-4">
             <button
               onClick={() => handleNavigation('/dashboard')}
@@ -204,8 +219,17 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onSearch }) => {
             </button>
           </div>
 
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg transition-colors"
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? <FaTimes className="text-xl" /> : <FaBars className="text-xl" />}
+          </button>
+
           {/* Action Icons */}
-          <div className="flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-2">
             
             {/* Notifications - Only show if logged in */}
             {user && (
@@ -451,6 +475,55 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onSearch }) => {
             )}
           </div>
         </div>
+
+        {/* Mobile Menu Dropdown */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-white dark:bg-gray-900 shadow-lg py-4 px-4 border-t border-gray-200 dark:border-gray-700">
+            <div className="flex flex-col space-y-2">
+              <button
+                onClick={() => handleNavigation('/dashboard')}
+                className="px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg font-medium text-left flex items-center gap-3 transition-colors"
+              >
+                <FaHome className="text-lg" />
+                <span>Home</span>
+              </button>
+              <button
+                onClick={() => handleNavigation('/courses')}
+                className="px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg font-medium text-left flex items-center gap-3 transition-colors"
+              >
+                <FaBook className="text-lg" />
+                <span>Courses</span>
+              </button>
+              <button
+                onClick={() => handleNavigation('/quiz')}
+                className="px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg font-medium text-left flex items-center gap-3 transition-colors"
+              >
+                <FaStar className="text-lg" />
+                <span>Quizzes</span>
+              </button>
+              <button
+                onClick={() => handleNavigation('/dsa/sheet')}
+                className="px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg font-medium text-left flex items-center gap-3 transition-colors"
+              >
+                <FaCode className="text-lg" />
+                <span>DSA Sheet</span>
+              </button>
+            </div>
+            
+            {/* Mobile Auth Button */}
+            {!user && (
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  navigate('/login');
+                }}
+                className="w-full mt-4 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all text-center"
+              >
+                Login
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </nav>
   );

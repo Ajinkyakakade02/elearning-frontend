@@ -93,53 +93,53 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
       <button onClick={handleLogout} className="hidden">Logout</button>
 
       {/* Hero Section */}
-      <div id="hero" className="relative bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white py-20 px-4 overflow-hidden">
+      <div id="hero" className="relative bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white py-12 sm:py-16 md:py-20 px-4 overflow-hidden">
         <div className="absolute inset-0 opacity-10 dark:opacity-5">
          
         </div>
         
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="flex flex-col lg:flex-row items-center gap-12">
+          <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
             
             {/* Left Side - Hero Content */}
             <div className="flex-1 text-center lg:text-left">
-              <div className="inline-block px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-sm font-semibold mb-6 backdrop-blur-sm">
+              <div className="inline-block px-3 py-1 sm:px-4 sm:py-2 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6 backdrop-blur-sm">
                 E-LEARN PLATFORM
               </div>
               
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 sm:mb-6 leading-tight">
                 Master JEE, NEET, UPSC,<br />
                 MHT-CET & DSA in One<br />
                 Powerful Platform
               </h1>
               
-              <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
+              <p className="text-base sm:text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-6 sm:mb-8">
                 Crack Exams. Build Skills. Achieve Excellence.
               </p>
               
               {/* Stats Section */}
-              <div className="flex flex-wrap gap-8 justify-center lg:justify-start">
+              <div className="flex flex-wrap gap-4 sm:gap-8 justify-center lg:justify-start">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                  <div className="text-xl sm:text-2xl md:text-3xl font-bold text-purple-600 dark:text-purple-400">
                     {stats.students.toLocaleString()}+
                   </div>
-                  <div className="text-gray-600 dark:text-gray-300 flex items-center gap-1">
+                  <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 flex items-center gap-1">
                     <FaUserGraduate /> Students
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                  <div className="text-xl sm:text-2xl md:text-3xl font-bold text-purple-600 dark:text-purple-400">
                     {stats.courses.toLocaleString()}+
                   </div>
-                  <div className="text-gray-600 dark:text-gray-300 flex items-center gap-1">
+                  <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 flex items-center gap-1">
                     <FaBook /> Courses
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+                  <div className="text-xl sm:text-2xl md:text-3xl font-bold text-purple-600 dark:text-purple-400">
                     {stats.quizzes.toLocaleString()}+
                   </div>
-                  <div className="text-gray-600 dark:text-gray-300 flex items-center gap-1">
+                  <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 flex items-center gap-1">
                     <FaChartLine /> Quizzes
                   </div>
                 </div>
@@ -152,7 +152,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
                 <img 
                   src={`${process.env.PUBLIC_URL}/images/3d-student.png`} 
                   alt="3D Student" 
-                  className="relative z-10 w-2/3 sm:w-1/2 md:w-3/5 lg:w-2/3 xl:w-3/4 max-w-lg mx-auto animate-float"
+                  className="relative z-10 w-3/4 sm:w-2/3 md:w-3/5 lg:w-2/3 xl:w-3/4 max-w-sm sm:max-w-md md:max-w-lg mx-auto animate-float"
                 />
               </div>
             </div>
@@ -161,43 +161,43 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
       </div>
 
       {/* Courses Section */}
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">
+      <div className="max-w-7xl mx-auto px-4 py-12 sm:py-16">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800 dark:text-white">
           Popular Courses
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
           {courses.map((course) => (
             <Link 
               to={course.path} 
               key={course.id} 
-              className="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
+              className="group bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
             >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="p-3 bg-gray-100 dark:bg-gray-700 rounded-xl flex-shrink-0">
-                  <span className="text-2xl text-gray-700 dark:text-gray-300">
+              <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                <div className="p-2 sm:p-3 bg-gray-100 dark:bg-gray-700 rounded-xl flex-shrink-0">
+                  <span className="text-xl sm:text-2xl text-gray-700 dark:text-gray-300">
                     {course.icon}
                   </span>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-white flex-1">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white flex-1">
                   {course.title}
                 </h3>
               </div>
               
-              <ul className="space-y-2 mb-4 flex-1">
-                <li className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+              <ul className="space-y-1 sm:space-y-2 mb-3 sm:mb-4 flex-1">
+                <li className="flex items-center gap-2 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                   <FaUserGraduate className="text-gray-500 dark:text-gray-500 flex-shrink-0" /> 
                   <span>{course.students.toLocaleString()}+ students</span>
                 </li>
-                <li className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                <li className="flex items-center gap-2 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                   <FaBook className="text-gray-500 dark:text-gray-500 flex-shrink-0" /> 
                   <span>{course.lessons}+ lessons</span>
                 </li>
               </ul>
               
               <div className="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700 mt-auto">
-                <button className="px-4 py-1 border-2 border-green-600 dark:border-green-500 text-green-600 dark:text-green-400 rounded-lg font-medium hover:bg-green-600 hover:text-white dark:hover:bg-green-500 dark:hover:text-white transition-all duration-300 flex items-center gap-2 group">
-                  Explore<FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+                <button className="px-3 sm:px-4 py-1 border-2 border-green-600 dark:border-green-500 text-green-600 dark:text-green-400 rounded-lg text-xs sm:text-sm font-medium hover:bg-green-600 hover:text-white dark:hover:bg-green-500 dark:hover:text-white transition-all duration-300 flex items-center gap-2 group">
+                  Explore<FaArrowRight className="text-xs sm:text-sm group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             </Link>
@@ -205,10 +205,10 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
         </div>
       </div>
 
-      {/* App Info Section */}
-      <div className="bg-gray-50 dark:bg-gray-900 py-16">
+      {/* App Info Section - remaining content unchanged but with responsive classes */}
+      <div className="bg-gray-50 dark:bg-gray-900 py-12 sm:py-16">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col lg:flex-row items-center gap-12">
+          <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
             
             {/* Left Side - Image */}
             <div className="flex-1">
@@ -216,30 +216,30 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
                 <img 
                   src={`${process.env.PUBLIC_URL}/images/3d-student2.png`} 
                   alt="3D Student" 
-                  className="relative z-10 w-2/3 sm:w-1/2 md:w-3/5 lg:w-2/3 xl:w-3/4 max-w-lg mx-auto animate-float"
+                  className="relative z-10 w-3/4 sm:w-2/3 md:w-3/5 lg:w-2/3 xl:w-3/4 max-w-sm sm:max-w-md md:max-w-lg mx-auto animate-float"
                 />
               </div>
             </div>
 
             {/* Right Side - Content */}
-            <div className="flex-1 space-y-8">
+            <div className="flex-1 space-y-6 sm:space-y-8">
               
               {/* Our Achievers */}
-              <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg">
-                <h3 className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
+              <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg">
+                <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-gray-800 dark:text-white">
                   <FaTrophy className="text-yellow-500" /> Our Achievers
                 </h3>
-                <ul className="space-y-3">
-                  <li className="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                <ul className="space-y-2 sm:space-y-3">
+                  <li className="flex items-center gap-3 text-sm sm:text-base text-gray-600 dark:text-gray-400">
                     <FaUniversity className="text-blue-500" /> Students selected in IITs
                   </li>
-                  <li className="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                  <li className="flex items-center gap-3 text-sm sm:text-base text-gray-600 dark:text-gray-400">
                     <FaHospital className="text-green-500" /> Students admitted to AIIMS
                   </li>
-                  <li className="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                  <li className="flex items-center gap-3 text-sm sm:text-base text-gray-600 dark:text-gray-400">
                     <FaLandmark className="text-purple-500" /> Selections in Government Colleges
                   </li>
-                  <li className="flex items-center gap-3 text-gray-600 dark:text-gray-400">
+                  <li className="flex items-center gap-3 text-sm sm:text-base text-gray-600 dark:text-gray-400">
                     <FaUserGraduate className="text-orange-500" /> IAS & IPS Officers in the making
                   </li>
                 </ul>
@@ -247,7 +247,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
 
               {/* Courses Card */}
               <div 
-                className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg cursor-pointer transform hover:scale-105 transition-all duration-300"
+                className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg cursor-pointer transform hover:scale-105 transition-all duration-300"
                 onClick={() => navigate('/courses')}
                 role="button"
                 tabIndex={0}
@@ -257,34 +257,33 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
                   }
                 }}
               >
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <FaBook className="text-4xl text-blue-600 dark:text-blue-400" />
-                    <h3 className="text-2xl font-bold text-gray-800 dark:text-white">All Courses</h3>
+                <div className="flex items-center justify-between mb-4 sm:mb-6">
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <FaBook className="text-3xl sm:text-4xl text-blue-600 dark:text-blue-400" />
+                    <h3 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">All Courses</h3>
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-800 dark:text-white">85+</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">Total Courses</div>
+                    <div className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">85+</div>
+                    <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Total Courses</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-800 dark:text-white">₹99</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">Starting Price</div>
+                    <div className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">₹99</div>
+                    <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Starting Price</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold text-gray-800 dark:text-white">24/7</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">Access</div>
+                    <div className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white">24/7</div>
+                    <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Access</div>
                   </div>
                 </div>
                 
-                <div className="flex items-center justify-between">
-                  {/* Green Bordered Button */}
-                  <button className="px-4 py-2 border-2 border-green-600 dark:border-green-500 text-green-600 dark:text-green-400 rounded-lg font-medium hover:bg-green-600 hover:text-white dark:hover:bg-green-500 dark:hover:text-white transition-all duration-300 flex items-center gap-2 group">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-0">
+                  <button className="px-3 sm:px-4 py-1 sm:py-2 border-2 border-green-600 dark:border-green-500 text-green-600 dark:text-green-400 rounded-lg text-sm font-medium hover:bg-green-600 hover:text-white dark:hover:bg-green-500 dark:hover:text-white transition-all duration-300 flex items-center gap-2 group">
                     Browse All Courses <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
                   </button>
-                  <span className="bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-400 px-5 py-2 rounded-lg text-sm font-semibold">
+                  <span className="bg-yellow-100 dark:bg-yellow-900 text-yellow-600 dark:text-yellow-400 px-3 sm:px-5 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-semibold">
                     New courses added
                   </span>
                 </div>
@@ -295,40 +294,40 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
       </div>
 
       {/* Quizzes Section */}
-      <div className="max-w-7xl mx-auto px-4 py-16">
-        <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">
+      <div className="max-w-7xl mx-auto px-4 py-12 sm:py-16">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12 text-gray-800 dark:text-white">
           Practice Quizzes
         </h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {quizzes.map((quiz) => (
             <Link 
               to={quiz.path} 
               key={quiz.id} 
-              className="group bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
+              className="group bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl p-4 sm:p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 flex flex-col h-full"
             >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center text-2xl text-gray-700 dark:text-gray-300 flex-shrink-0">
+              <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center text-xl sm:text-2xl text-gray-700 dark:text-gray-300 flex-shrink-0">
                   {quiz.icon}
                 </div>
-                <h3 className="text-lg font-semibold text-gray-800 dark:text-white flex-1">
+                <h3 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white flex-1">
                   {quiz.title}
                 </h3>
               </div>
               
-              <ul className="space-y-3 mb-4 flex-1">
-                <li className="flex items-center gap-3 text-gray-600 dark:text-gray-400">
-                  <FaBook className="text-gray-500 dark:text-gray-500 text-sm flex-shrink-0" />
-                  <span className="text-sm">{quiz.questions}+ questions</span>
+              <ul className="space-y-2 sm:space-y-3 mb-3 sm:mb-4 flex-1">
+                <li className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                  <FaBook className="text-gray-500 dark:text-gray-500 text-xs sm:text-sm flex-shrink-0" />
+                  <span>{quiz.questions}+ questions</span>
                 </li>
-                <li className="flex items-center gap-3 text-gray-600 dark:text-gray-400">
-                  <FaClock className="text-gray-500 dark:text-gray-500 text-sm flex-shrink-0" />
-                  <span className="text-sm">{Math.round(quiz.questions * 0.6)} min estimated</span>
+                <li className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                  <FaClock className="text-gray-500 dark:text-gray-500 text-xs sm:text-sm flex-shrink-0" />
+                  <span>{Math.round(quiz.questions * 0.6)} min estimated</span>
                 </li>
               </ul>
               
-              <div className="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700 mt-auto">
-                <button className="px-4 py-1 border-2 border-green-600 dark:border-green-500 text-green-600 dark:text-green-400 rounded-lg font-medium hover:bg-green-600 hover:text-white dark:hover:bg-green-500 dark:hover:text-white transition-all duration-300 flex items-center gap-2 group">
+              <div className="flex items-center justify-between pt-2 sm:pt-3 border-t border-gray-200 dark:border-gray-700 mt-auto">
+                <button className="px-3 sm:px-4 py-1 border-2 border-green-600 dark:border-green-500 text-green-600 dark:text-green-400 rounded-lg text-xs sm:text-sm font-medium hover:bg-green-600 hover:text-white dark:hover:bg-green-500 dark:hover:text-white transition-all duration-300 flex items-center gap-2 group">
                   Quiz Start <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
