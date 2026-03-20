@@ -4,7 +4,6 @@ import { useAuth } from '../../hooks/useAuth';
 import { toast } from 'react-hot-toast';
 import { 
   FaBook, 
-  FaGraduationCap, 
   FaChartLine, 
   FaUserGraduate, 
   FaSun,
@@ -13,7 +12,6 @@ import {
   FaEnvelope,
   FaUser,
   FaArrowRight,
-  FaCheckCircle,
   FaTrophy,
   FaUniversity,
   FaHospital,
@@ -21,7 +19,6 @@ import {
   FaShieldAlt,
   FaRocket,
   FaPlayCircle,
-  FaChartBar,
   FaGoogle,
   FaGithub,
   FaBolt,
