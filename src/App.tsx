@@ -13,6 +13,7 @@ import ProtectedRoute from './components/core/ProtectedRoute';
 
 // ===== PUBLIC PAGES =====
 import LoginPage from './pages/auth/LoginPage';
+import RegisterPage from './pages/auth/RegisterPage';
 import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import OAuthCallbackPage from './pages/auth/OAuthCallbackPage';
 
@@ -178,12 +179,20 @@ function App() {
           
           <div className={`app ${darkMode ? 'dark' : 'light'}`}>
             <Routes>
-              {/* ===== PUBLIC ROUTES - Login is the default landing page ===== */}
+              {/* ===== PUBLIC ROUTES ===== */}
               <Route path="/" element={<Navigate to="/login" replace />} />
               
+              {/* Login Page */}
               <Route path="/login" element={
-                <PageLayout darkMode={darkMode} setDarkMode={setDarkMode} showNavbar={false}>
+                <PageLayout darkMode={darkMode} setDarkMode={setDarkMode} showNavbar={true}>
                   <LoginPage darkMode={darkMode} setDarkMode={setDarkMode} />
+                </PageLayout>
+              } />
+              
+              {/* Register Page - ADDED THIS */}
+              <Route path="/register" element={
+                <PageLayout darkMode={darkMode} setDarkMode={setDarkMode} showNavbar={true}>
+                  <RegisterPage darkMode={darkMode} setDarkMode={setDarkMode} />
                 </PageLayout>
               } />
               
@@ -196,7 +205,7 @@ function App() {
               <Route path="/auth/google/callback" element={<OAuthCallbackPage />} />
               <Route path="/auth/github/callback" element={<OAuthCallbackPage />} />
 
-              {/* ===== PROTECTED USER ROUTES - Only accessible after login ===== */}
+              {/* ===== PROTECTED USER ROUTES ===== */}
               <Route path="/dashboard" element={
                 <ProtectedRoute>
                   <PageLayout darkMode={darkMode} setDarkMode={setDarkMode}>

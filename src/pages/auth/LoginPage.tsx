@@ -162,7 +162,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
               Login
             </button>
             <button
-              onClick={() => handleNavClick('register')}
+              onClick={() => navigate('/register')}
               className="px-4 py-2 border border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-colors"
             >
               Sign Up
@@ -316,14 +316,37 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
                 </Link>
               </div>
               
-              <button 
-                type="submit" 
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={isLoading}
-              >
-                {isLoading ? 'Logging in...' : 'Login'} 
-                {!isLoading && <FaArrowRight className="group-hover:translate-x-1 transition-transform" />}
-              </button>
+              {/* Two Buttons Side by Side - BOTH SAME GRADIENT */}
+              <div className="flex gap-4">
+                <button 
+                  type="submit" 
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all flex items-center justify-center gap-2 group disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <div className="flex items-center gap-2">
+                      <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Logging in...
+                    </div>
+                  ) : (
+                    <>
+                      Login <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+                    </>
+                  )}
+                </button>
+                
+                <button 
+                  type="button"
+                  onClick={() => navigate('/register')}
+                  className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all flex items-center justify-center gap-2 group"
+                >
+                  Sign Up
+                  <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
             </form>
 
             {/* Social Login Divider */}
@@ -360,7 +383,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
             <div className="text-center text-sm text-gray-600 dark:text-gray-300">
               New to E-LEARN?{' '}
               <button 
-                onClick={scrollToLogin} 
+                onClick={() => navigate('/register')} 
                 className="text-blue-600 dark:text-blue-400 hover:underline font-medium inline-flex items-center gap-1"
               >
                 Create an account <FaArrowRight className="text-xs" />
@@ -370,6 +393,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
         </div>
       </div>
 
+      {/* Rest of the component remains the same - App Info Section, Guide Section, etc. */}
       {/* App Info Section */}
       <div className="bg-gray-50 dark:bg-gray-900 py-16 px-4">
         <div className="max-w-7xl mx-auto">
@@ -566,7 +590,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
                   </div>
                   <div>
                     <p className="font-medium text-gray-800 dark:text-white">Access premium courses</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Unlock all courses at ₹99/-</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">Unlock all courses at FREE</p>
                   </div>
                 </div>
               </div>
@@ -614,13 +638,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
                   </div>
                   <div className="flex items-center gap-2 text-gray-700 dark:text-gray-300">
                     <FaCheckCircle className="text-green-500" />
-                    <span>All courses at just ₹99/-</span>
+                    <span>All courses at just FREE</span>
                   </div>
                 </div>
 
                 {/* CTA Button */}
                 <button 
-                  onClick={scrollToLogin}
+                  onClick={() => navigate('/register')}
                   className="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all flex items-center justify-center gap-2 group"
                 >
                   Create Free Account <FaArrowRight className="group-hover:translate-x-1 transition-transform" />

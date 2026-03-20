@@ -95,6 +95,15 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onSearch }) => {
     return colors[index];
   };
 
+  // Handle navigation with authentication check
+  const handleNavigation = (path: string) => {
+    if (user) {
+      navigate(path);
+    } else {
+      navigate('/login');
+    }
+  };
+
   // Scroll effect
   useEffect(() => {
     const handleScroll = () => {
@@ -160,10 +169,10 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onSearch }) => {
             </span>
           </Link>
 
-          {/* Navigation Buttons - Replacing Search Bar */}
+          {/* Navigation Buttons - Updated to check authentication */}
           <div className="hidden md:flex items-center gap-2 mx-4">
             <button
-              onClick={() => navigate('/dashboard')}
+              onClick={() => handleNavigation('/dashboard')}
               className="px-4 py-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors flex items-center gap-2"
             >
               <FaHome className="text-lg" />
@@ -171,7 +180,7 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onSearch }) => {
             </button>
             
             <button
-              onClick={() => navigate('/courses')}
+              onClick={() => handleNavigation('/courses')}
               className="px-4 py-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors flex items-center gap-2"
             >
               <FaBook className="text-lg" />
@@ -179,7 +188,7 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onSearch }) => {
             </button>
             
             <button
-              onClick={() => navigate('/quiz')}
+              onClick={() => handleNavigation('/quiz')}
               className="px-4 py-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors flex items-center gap-2"
             >
               <FaStar className="text-lg" />
@@ -187,7 +196,7 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onSearch }) => {
             </button>
             
             <button
-              onClick={() => navigate('/dsa/sheet')}
+              onClick={() => handleNavigation('/dsa/sheet')}
               className="px-4 py-2 text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors flex items-center gap-2"
             >
               <FaCode className="text-lg" />
@@ -198,69 +207,71 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onSearch }) => {
           {/* Action Icons */}
           <div className="flex items-center gap-2">
             
-            {/* Notifications */}
-            <div className="relative" ref={notificationsRef}>
-              <button 
-                className={`relative p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all ${
-                  showNotifications ? 'text-blue-600 dark:text-blue-400 bg-gray-100 dark:bg-gray-800' : ''
-                }`}
-                onClick={() => setShowNotifications(!showNotifications)}
-              >
-                <FaBell className="text-xl" />
-                {unreadCount > 0 && (
-                  <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-xs flex items-center justify-center rounded-full">
-                    {unreadCount}
-                  </span>
-                )}
-              </button>
+            {/* Notifications - Only show if logged in */}
+            {user && (
+              <div className="relative" ref={notificationsRef}>
+                <button 
+                  className={`relative p-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all ${
+                    showNotifications ? 'text-blue-600 dark:text-blue-400 bg-gray-100 dark:bg-gray-800' : ''
+                  }`}
+                  onClick={() => setShowNotifications(!showNotifications)}
+                >
+                  <FaBell className="text-xl" />
+                  {unreadCount > 0 && (
+                    <span className="absolute top-1 right-1 w-4 h-4 bg-red-500 text-white text-xs flex items-center justify-center rounded-full">
+                      {unreadCount}
+                    </span>
+                  )}
+                </button>
 
-              {/* Notifications Dropdown */}
-              {showNotifications && (
-                <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50 animate-slideDown">
-                  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                    <h3 className="font-semibold text-gray-800 dark:text-white">Notifications</h3>
-                  </div>
-                  
-                  <div className="max-h-96 overflow-y-auto">
-                    {notifications.length > 0 ? (
-                      notifications.map(notif => (
-                        <div 
-                          key={notif.id} 
-                          className={`p-4 border-b border-gray-100 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
-                            !notif.read ? 'bg-blue-50 dark:bg-blue-900/20' : ''
-                          }`}
-                          onClick={() => handleNotificationClick(notif)}
-                          role="button"
-                          tabIndex={0}
-                          onKeyPress={(e) => {
-                            if (e.key === 'Enter' || e.key === ' ') {
-                              handleNotificationClick(notif);
-                            }
-                          }}
-                        >
-                          <div className="flex gap-3">
-                            <span className="text-xl">{notif.icon}</span>
-                            <div className="flex-1">
-                              <p className="font-medium text-gray-800 dark:text-white text-sm">{notif.title}</p>
-                              <p className="text-gray-600 dark:text-gray-300 text-xs mt-1">{notif.message}</p>
-                              <span className="text-xs text-gray-500 dark:text-gray-400 mt-2 block">
-                                {timeAgo(notif.createdAt)}
-                              </span>
+                {/* Notifications Dropdown */}
+                {showNotifications && (
+                  <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50 animate-slideDown">
+                    <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                      <h3 className="font-semibold text-gray-800 dark:text-white">Notifications</h3>
+                    </div>
+                    
+                    <div className="max-h-96 overflow-y-auto">
+                      {notifications.length > 0 ? (
+                        notifications.map(notif => (
+                          <div 
+                            key={notif.id} 
+                            className={`p-4 border-b border-gray-100 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors ${
+                              !notif.read ? 'bg-blue-50 dark:bg-blue-900/20' : ''
+                            }`}
+                            onClick={() => handleNotificationClick(notif)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyPress={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                handleNotificationClick(notif);
+                              }
+                            }}
+                          >
+                            <div className="flex gap-3">
+                              <span className="text-xl">{notif.icon}</span>
+                              <div className="flex-1">
+                                <p className="font-medium text-gray-800 dark:text-white text-sm">{notif.title}</p>
+                                <p className="text-gray-600 dark:text-gray-300 text-xs mt-1">{notif.message}</p>
+                                <span className="text-xs text-gray-500 dark:text-gray-400 mt-2 block">
+                                  {timeAgo(notif.createdAt)}
+                                </span>
+                              </div>
+                              <FaExternalLinkAlt className="text-gray-400 text-xs mt-1" />
                             </div>
-                            <FaExternalLinkAlt className="text-gray-400 text-xs mt-1" />
                           </div>
+                        ))
+                      ) : (
+                        <div className="p-8 text-center text-gray-500 dark:text-gray-400">
+                          <FaBell className="text-4xl mx-auto mb-2 opacity-50" />
+                          <p className="text-sm">No notifications</p>
                         </div>
-                      ))
-                    ) : (
-                      <div className="p-8 text-center text-gray-500 dark:text-gray-400">
-                        <FaBell className="text-4xl mx-auto mb-2 opacity-50" />
-                        <p className="text-sm">No notifications</p>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
 
             {/* Settings Dropdown */}
             <div className="relative" ref={settingsRef}>
@@ -292,19 +303,21 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onSearch }) => {
                       </button>
                     </div>
 
-                    {/* Notifications Toggle */}
-                    <div className="flex items-center justify-between py-2">
-                      <span className="text-sm text-gray-600 dark:text-gray-300">Notifications</span>
-                      <label className="relative inline-flex items-center cursor-pointer">
-                        <input 
-                          type="checkbox" 
-                          className="sr-only peer"
-                          checked={notificationsEnabled}
-                          onChange={() => setNotificationsEnabled(!notificationsEnabled)}
-                        />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                      </label>
-                    </div>
+                    {/* Notifications Toggle - Only show if logged in */}
+                    {user && (
+                      <div className="flex items-center justify-between py-2">
+                        <span className="text-sm text-gray-600 dark:text-gray-300">Notifications</span>
+                        <label className="relative inline-flex items-center cursor-pointer">
+                          <input 
+                            type="checkbox" 
+                            className="sr-only peer"
+                            checked={notificationsEnabled}
+                            onChange={() => setNotificationsEnabled(!notificationsEnabled)}
+                          />
+                          <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                        </label>
+                      </div>
+                    )}
 
                     {/* Language Select */}
                     <div className="flex items-center justify-between py-2">
@@ -336,94 +349,106 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, setDarkMode, onSearch }) => {
               )}
             </div>
 
-            {/* Account Dropdown */}
-            <div className="relative" ref={accountRef}>
-              <button 
-                className={`p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all ${
-                  showAccount ? 'bg-gray-100 dark:bg-gray-800' : ''
-                }`}
-                onClick={() => setShowAccount(!showAccount)}
-              >
-                <span 
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-semibold"
-                  style={{ backgroundColor: userData.avatarColor }}
+            {/* Account Dropdown - Only show if logged in */}
+            {user && (
+              <div className="relative" ref={accountRef}>
+                <button 
+                  className={`p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all ${
+                    showAccount ? 'bg-gray-100 dark:bg-gray-800' : ''
+                  }`}
+                  onClick={() => setShowAccount(!showAccount)}
                 >
-                  {userData.avatar}
-                </span>
-              </button>
+                  <span 
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-semibold"
+                    style={{ backgroundColor: userData.avatarColor }}
+                  >
+                    {userData.avatar}
+                  </span>
+                </button>
 
-              {showAccount && (
-                <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50 animate-slideDown">
-                  {/* Account Header */}
-                  <div className="p-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-                    <div className="flex items-center gap-3">
-                      <span 
-                        className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold bg-white/20 border-2 border-white"
-                        style={{ backgroundColor: userData.avatarColor }}
-                      >
-                        {userData.avatar}
-                      </span>
-                      <div>
-                        <h4 className="font-semibold">{userData.name}</h4>
-                        <p className="text-sm text-white/80">{userData.email}</p>
-                        <span className="inline-block mt-1 px-2 py-0.5 bg-white/20 rounded-full text-xs">
-                          Student
+                {showAccount && (
+                  <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50 animate-slideDown">
+                    {/* Account Header */}
+                    <div className="p-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+                      <div className="flex items-center gap-3">
+                        <span 
+                          className="w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold bg-white/20 border-2 border-white"
+                          style={{ backgroundColor: userData.avatarColor }}
+                        >
+                          {userData.avatar}
                         </span>
+                        <div>
+                          <h4 className="font-semibold">{userData.name}</h4>
+                          <p className="text-sm text-white/80">{userData.email}</p>
+                          <span className="inline-block mt-1 px-2 py-0.5 bg-white/20 rounded-full text-xs">
+                            Student
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Stats */}
-                  <div className="grid grid-cols-3 gap-2 p-4 border-b border-gray-200 dark:border-gray-700">
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-gray-800 dark:text-white">{userData.enrolled}</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Enrolled</div>
+                    {/* Stats */}
+                    <div className="grid grid-cols-3 gap-2 p-4 border-b border-gray-200 dark:border-gray-700">
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-gray-800 dark:text-white">{userData.enrolled}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">Enrolled</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-gray-800 dark:text-white">{userData.completed}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">Completed</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-lg font-bold text-gray-800 dark:text-white">{userData.streak}</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400">Streak</div>
+                      </div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-gray-800 dark:text-white">{userData.completed}</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Completed</div>
-                    </div>
-                    <div className="text-center">
-                      <div className="text-lg font-bold text-gray-800 dark:text-white">{userData.streak}</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Streak</div>
-                    </div>
-                  </div>
 
-                  {/* Menu Items */}
-                  <div className="p-2">
-                    <Link to="/profile" className="flex items-center justify-between px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" onClick={() => setShowAccount(false)}>
-                      <span className="flex items-center gap-2"><FaUserCircle /> Profile</span>
-                      <FaChevronRight className="text-xs text-gray-400" />
-                    </Link>
-                    <Link to="/my-courses" className="flex items-center justify-between px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" onClick={() => setShowAccount(false)}>
-                      <span className="flex items-center gap-2"><FaBook /> My Courses</span>
-                      <FaChevronRight className="text-xs text-gray-400" />
-                    </Link>
-                    
-                    {/* Progress Page Link */}
-                    <Link to="/progress" className="flex items-center justify-between px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" onClick={() => setShowAccount(false)}>
-                      <span className="flex items-center gap-2"><FaChartLine /> Progress</span>
-                      <FaChevronRight className="text-xs text-gray-400" />
-                    </Link>
-                    
-                    <Link to="/certificates" className="flex items-center justify-between px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" onClick={() => setShowAccount(false)}>
-                      <span className="flex items-center gap-2"><FaTrophy /> Certificates</span>
-                      <FaChevronRight className="text-xs text-gray-400" />
-                    </Link>
-                    <Link to="/wishlist" className="flex items-center justify-between px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" onClick={() => setShowAccount(false)}>
-                      <span className="flex items-center gap-2"><FaStar /> Wishlist</span>
-                      <FaChevronRight className="text-xs text-gray-400" />
-                    </Link>
-                    
-                    <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
-                    
-                    <button onClick={handleLogout} className="w-full flex items-center justify-between px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">
-                      <span className="flex items-center gap-2"><FaSignOutAlt /> Logout</span>
-                    </button>
+                    {/* Menu Items */}
+                    <div className="p-2">
+                      <Link to="/profile" className="flex items-center justify-between px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" onClick={() => setShowAccount(false)}>
+                        <span className="flex items-center gap-2"><FaUserCircle /> Profile</span>
+                        <FaChevronRight className="text-xs text-gray-400" />
+                      </Link>
+                      <Link to="/my-courses" className="flex items-center justify-between px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" onClick={() => setShowAccount(false)}>
+                        <span className="flex items-center gap-2"><FaBook /> My Courses</span>
+                        <FaChevronRight className="text-xs text-gray-400" />
+                      </Link>
+                      
+                      {/* Progress Page Link */}
+                      <Link to="/progress" className="flex items-center justify-between px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" onClick={() => setShowAccount(false)}>
+                        <span className="flex items-center gap-2"><FaChartLine /> Progress</span>
+                        <FaChevronRight className="text-xs text-gray-400" />
+                      </Link>
+                      
+                      <Link to="/certificates" className="flex items-center justify-between px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" onClick={() => setShowAccount(false)}>
+                        <span className="flex items-center gap-2"><FaTrophy /> Certificates</span>
+                        <FaChevronRight className="text-xs text-gray-400" />
+                      </Link>
+                      <Link to="/wishlist" className="flex items-center justify-between px-3 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors" onClick={() => setShowAccount(false)}>
+                        <span className="flex items-center gap-2"><FaStar /> Wishlist</span>
+                        <FaChevronRight className="text-xs text-gray-400" />
+                      </Link>
+                      
+                      <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+                      
+                      <button onClick={handleLogout} className="w-full flex items-center justify-between px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">
+                        <span className="flex items-center gap-2"><FaSignOutAlt /> Logout</span>
+                      </button>
+                    </div>
                   </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
+
+            {/* If not logged in, show Login button */}
+            {!user && (
+              <button
+                onClick={() => navigate('/login')}
+                className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all"
+              >
+                Login
+              </button>
+            )}
           </div>
         </div>
       </div>
