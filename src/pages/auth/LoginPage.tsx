@@ -26,7 +26,9 @@ import {
   FaBolt,
   FaHeartbeat,
   FaPen,
-  FaLaptopCode
+  FaLaptopCode,
+  FaUsers,
+  FaStar
 } from 'react-icons/fa';
 
 interface LoginPageProps {
@@ -124,6 +126,23 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
   const scrollToLogin = () => {
     document.getElementById('login-form')?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  // Stats cards data
+  const statsCards = [
+    { icon: <FaUserGraduate />, number: '50,000+', label: 'Active Learners', color: '#3b82f6', bgColor: 'bg-blue-100 dark:bg-blue-900/30' },
+    { icon: <FaBook />, number: '1,200+', label: 'Expert Courses', color: '#10b981', bgColor: 'bg-green-100 dark:bg-green-900/30' },
+    { icon: <FaChartLine />, number: '20,000+', label: 'Practice Questions', color: '#f59e0b', bgColor: 'bg-yellow-100 dark:bg-yellow-900/30' },
+    { icon: <FaTrophy />, number: '15,000+', label: 'Success Stories', color: '#ef4444', bgColor: 'bg-red-100 dark:bg-red-900/30' }
+  ];
+
+  // Popular courses data with colors and icons matching dashboard
+  const popularCourses = [
+    { to: '/jee', icon: <FaBolt className="text-xl" />, title: 'JEE Preparation', desc: 'IIT JEE Main & Advanced', color: '#6366f1', bgColor: 'bg-indigo-100 dark:bg-indigo-900/30', iconColor: '#6366f1' },
+    { to: '/neet', icon: <FaHeartbeat className="text-xl" />, title: 'NEET UG', desc: 'Medical Entrance Exam', color: '#10b981', bgColor: 'bg-green-100 dark:bg-green-900/30', iconColor: '#10b981' },
+    { to: '/upsc', icon: <FaLandmark className="text-xl" />, title: 'UPSC CSE', desc: 'Civil Services Exam', color: '#8b5cf6', bgColor: 'bg-purple-100 dark:bg-purple-900/30', iconColor: '#8b5cf6' },
+    { to: '/mhtcet', icon: <FaPen className="text-xl" />, title: 'MHT-CET', desc: 'Maharashtra CET', color: '#f59e0b', bgColor: 'bg-yellow-100 dark:bg-yellow-900/30', iconColor: '#f59e0b' },
+    { to: '/dsa', icon: <FaLaptopCode className="text-xl" />, title: 'DSA', desc: 'Data Structures & Algorithms', color: '#ec4899', bgColor: 'bg-pink-100 dark:bg-pink-900/30', iconColor: '#ec4899' }
+  ];
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -316,7 +335,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
                 </Link>
               </div>
               
-              {/* Two Buttons Side by Side - BOTH SAME GRADIENT */}
+              {/* Two Buttons Side by Side */}
               <div className="flex gap-4">
                 <button 
                   type="submit" 
@@ -393,7 +412,52 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
         </div>
       </div>
 
-      {/* Rest of the component remains the same - App Info Section, Guide Section, etc. */}
+      {/* Statistics Section - Enhanced Cards */}
+      <div id="statistics" className="py-16 px-4 bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">Our Impact</h2>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {statsCards.map((item, index) => (
+              <div key={index} className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border-t-4" style={{ borderTopColor: item.color }}>
+                <div className="text-5xl mb-4" style={{ color: item.color }}>
+                  {item.icon}
+                </div>
+                <div className="text-3xl font-bold text-gray-800 dark:text-white mb-2">{item.number}</div>
+                <div className="text-gray-600 dark:text-gray-400">{item.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Popular Courses Section - Enhanced Cards like Dashboard */}
+      <div id="courses" className="py-16 px-4 bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">Popular Courses</h2>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+            {popularCourses.map((course, index) => (
+              <Link
+                key={index}
+                to={course.to}
+                className="group bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 text-center hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+              >
+                <div className="text-4xl mb-4" style={{ color: course.iconColor }}>
+                  {course.icon}
+                </div>
+                <h3 className="font-bold text-lg mb-2 text-gray-800 dark:text-white">{course.title}</h3>
+                <p className="text-xs text-gray-600 dark:text-gray-400">{course.desc}</p>
+                <div className="mt-4 inline-block px-4 py-2 text-sm font-medium text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300" style={{ backgroundColor: course.color }}>
+                  Explore
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Rest of the component remains the same */}
       {/* App Info Section */}
       <div className="bg-gray-50 dark:bg-gray-900 py-16 px-4">
         <div className="max-w-7xl mx-auto">
@@ -493,55 +557,6 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
                 <h3 className="text-lg font-semibold mb-2 text-gray-800 dark:text-white">{item.title}</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">{item.desc}</p>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Statistics Section */}
-      <div id="statistics" className="py-16 px-4 bg-gray-50 dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">Our Impact</h2>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: <FaUserGraduate />, number: '50,000+', label: 'Active Learners' },
-              { icon: <FaBook />, number: '1,200+', label: 'Expert Courses' },
-              { icon: <FaChartLine />, number: '20,000+', label: 'Practice Questions' },
-              { icon: <FaTrophy />, number: '15,000+', label: 'Success Stories' }
-            ].map((item, index) => (
-              <div key={index} className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition-all hover:-translate-y-1">
-                <div className="text-4xl text-blue-600 dark:text-blue-400 mb-3">{item.icon}</div>
-                <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 mb-1">{item.number}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400">{item.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Courses Section */}
-      <div id="courses" className="py-16 px-4 bg-gray-50 dark:bg-gray-900">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-white">Popular Courses</h2>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {[
-              { to: '/jee', icon: <FaBolt className="text-xl" />, title: 'JEE Preparation', desc: 'IIT JEE Main & Advanced' },
-              { to: '/neet', icon: <FaHeartbeat className="text-xl" />, title: 'NEET UG', desc: 'Medical Entrance Exam' },
-              { to: '/upsc', icon: <FaLandmark className="text-xl" />, title: 'UPSC CSE', desc: 'Civil Services Exam' },
-              { to: '/mhtcet', icon: <FaPen className="text-xl" />, title: 'MHT-CET', desc: 'Maharashtra CET' },
-              { to: '/dsa', icon: <FaLaptopCode className="text-xl" />, title: 'DSA', desc: 'Data Structures & Algorithms' }
-            ].map((course, index) => (
-              <Link
-                key={index}
-                to={course.to}
-                className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition-all hover:-translate-y-1"
-              >
-                <div className="text-3xl text-blue-600 dark:text-blue-400 mb-3">{course.icon}</div>
-                <h3 className="font-semibold mb-1 text-gray-800 dark:text-white">{course.title}</h3>
-                <p className="text-xs text-gray-600 dark:text-gray-400">{course.desc}</p>
-              </Link>
             ))}
           </div>
         </div>
