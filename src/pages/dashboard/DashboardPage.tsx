@@ -304,11 +304,11 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
             {/* Image */}
             <div className="flex-1 flex justify-center">
               <div className="relative">
-                <div className="absolute inset-0 m-auto w-48 h-48 sm:w-64 sm:h-64 rounded-full bg-purple-400/15 blur-2xl" />
+                <div className="absolute inset-0 m-auto w-56 h-56 rounded-full bg-purple-400/15 blur-2xl" />
                 <img
                   src={`${process.env.PUBLIC_URL}/images/3d-student2.png`}
                   alt="3D Student"
-                  className="relative z-10 w-3/4 sm:w-2/3 lg:w-2/3 max-w-sm sm:max-w-md mx-auto animate-float drop-shadow-xl"
+                  className="relative z-10 w-full max-w-lg mx-auto animate-float drop-shadow-xl"
                 />
               </div>
             </div>
@@ -364,7 +364,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
                 <div className="grid grid-cols-3 gap-3 mb-5">
                   {[
                     { val: '85+', label: 'Total Courses' },
-                    { val: '₹99', label: 'Starting Price' },
+                    { val: 'Free', label: 'Starting Price' },
                     { val: '24/7', label: 'Access' },
                   ].map((s, i) => (
                     <div
