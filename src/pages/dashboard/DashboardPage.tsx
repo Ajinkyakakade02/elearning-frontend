@@ -58,13 +58,58 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
     return () => clearInterval(interval);
   }, []);
 
-  // Course categories
+  // Course categories with images
   const courses = [
-    { id: 'jee', title: 'JEE Preparation', icon: <FaBolt />, path: '/jee', color: '#6366f1', students: 15000, lessons: 280 },
-    { id: 'neet', title: 'NEET UG', icon: <FaHeartbeat />, path: '/neet', color: '#10b981', students: 18000, lessons: 320 },
-    { id: 'upsc', title: 'UPSC CSE', icon: <FaLandmark />, path: '/upsc', color: '#8b5cf6', students: 12000, lessons: 450 },
-    { id: 'mhtcet', title: 'MHT-CET', icon: <FaPen />, path: '/mhtcet', color: '#f59e0b', students: 8000, lessons: 180 },
-    { id: 'dsa', title: 'DSA', icon: <FaLaptopCode />, path: '/dsa', color: '#ec4899', students: 22000, lessons: 150 },
+    { 
+      id: 'jee', 
+      title: 'JEE Preparation', 
+      icon: <FaBolt />, 
+      path: '/jee', 
+      color: '#6366f1', 
+      students: 15000, 
+      lessons: 280,
+      image: '/images/courses/jee.jpg'
+    },
+    { 
+      id: 'neet', 
+      title: 'NEET UG', 
+      icon: <FaHeartbeat />, 
+      path: '/neet', 
+      color: '#10b981', 
+      students: 18000, 
+      lessons: 320,
+      image: '/images/courses/neet.jpg'
+    },
+    { 
+      id: 'upsc', 
+      title: 'UPSC CSE', 
+      icon: <FaLandmark />, 
+      path: '/upsc', 
+      color: '#8b5cf6', 
+      students: 12000, 
+      lessons: 450,
+      image: '/images/courses/upsc.jpg'
+    },
+    { 
+      id: 'mhtcet', 
+      title: 'MHT-CET', 
+      icon: <FaPen />, 
+      path: '/mhtcet', 
+      color: '#f59e0b', 
+      students: 8000, 
+      lessons: 180,
+      image: '/images/courses/mhtcet.jpg'
+    },
+    { 
+      id: 'dsa', 
+      title: 'DSA', 
+      icon: <FaLaptopCode />, 
+      path: '/dsa', 
+      color: '#ec4899', 
+      students: 22000, 
+      lessons: 150,
+      image: '/images/courses/dsa.jpg'
+    },
   ];
 
   // Quiz categories
@@ -227,7 +272,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
         </div>
       </div>
 
-      {/* ─── Popular Courses ─── */}
+      {/* ─── Popular Courses WITH IMAGES ─── */}
       <div className="dashboard-root max-w-7xl mx-auto px-4 py-14 sm:py-20">
         <div className="text-center mb-10 sm:mb-14">
           <h2 className="display-font text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 dark:text-white mb-2">
@@ -241,55 +286,38 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ darkMode, setDarkMode }) 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 sm:gap-6">
           {courses.map((course, idx) => (
             <Link
-              to={course.path}
               key={course.id}
-              className="card-hover group bg-white dark:bg-gray-800 rounded-2xl p-5 sm:p-6 shadow-md flex flex-col h-full border border-gray-100 dark:border-gray-700/60"
-              style={{ animationDelay: `${idx * 0.07}s` }}
+              to={course.path}
+              className="card-hover group bg-white dark:bg-gray-800 rounded-2xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700/60 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
             >
-              {/* Accent top bar */}
-              <div className="h-1 rounded-full mb-5 -mx-1 opacity-80" style={{ background: course.color }} />
-
-              <div className="flex items-center gap-3 mb-4">
-                <div
-                  className="p-2.5 rounded-xl flex-shrink-0 text-white text-lg"
-                  style={{ backgroundColor: course.color + '22', color: course.color }}
-                >
-                  {course.icon}
-                </div>
-                <h3 className="display-font text-sm sm:text-base font-bold text-gray-800 dark:text-white leading-tight flex-1">
-                  {course.title}
-                </h3>
+              {/* Course Image */}
+              <div className="w-full h-40 overflow-hidden">
+                <img
+                  src={course.image}
+                  alt={course.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
               </div>
-
-              <ul className="space-y-2 mb-4 flex-1">
-                <li className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                  <FaUserGraduate className="flex-shrink-0" style={{ color: course.color }} />
-                  <span>{course.students.toLocaleString()}+ students</span>
-                </li>
-                <li className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-                  <FaBook className="flex-shrink-0" style={{ color: course.color }} />
-                  <span>{course.lessons}+ lessons</span>
-                </li>
-              </ul>
-
-              <div className="pt-3 border-t border-gray-100 dark:border-gray-700/60 mt-auto">
-                <button
-                  className="explore-btn w-full px-4 py-1.5 rounded-lg text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 border-2 transition-colors duration-200"
-                  style={{
-                    borderColor: course.color,
-                    color: course.color,
-                  }}
-                  onMouseEnter={e => {
-                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = course.color;
-                    (e.currentTarget as HTMLButtonElement).style.color = '#fff';
-                  }}
-                  onMouseLeave={e => {
-                    (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'transparent';
-                    (e.currentTarget as HTMLButtonElement).style.color = course.color;
-                  }}
+              
+              {/* Content Section */}
+              <div className="p-5">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="text-xl" style={{ color: course.color }}>
+                    {course.icon}
+                  </div>
+                  <h3 className="display-font font-bold text-sm sm:text-base text-gray-800 dark:text-white">
+                    {course.title}
+                  </h3>
+                </div>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                  {course.students.toLocaleString()}+ students • {course.lessons}+ lessons
+                </p>
+                <div
+                  className="inline-block px-4 py-1.5 text-xs font-bold text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
+                  style={{ backgroundColor: course.color }}
                 >
-                  Explore <FaArrowRight className="text-xs group-hover:translate-x-1 transition-transform" />
-                </button>
+                  Explore
+                </div>
               </div>
             </Link>
           ))}
