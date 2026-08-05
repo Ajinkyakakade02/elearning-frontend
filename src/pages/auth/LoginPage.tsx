@@ -116,13 +116,48 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
     { icon: <FaTrophy />,       number: '15,000+', label: 'Success Stories',      color: '#ef4444' },
   ];
 
-  // Popular courses data with colors and icons matching dashboard
+  // Popular courses data with colors, icons, and images
   const popularCourses = [
-    { to: '/jee',    icon: <FaBolt className="text-xl" />,      title: 'JEE Preparation',           desc: 'IIT JEE Main & Advanced',         color: '#6366f1' },
-    { to: '/neet',   icon: <FaHeartbeat className="text-xl" />, title: 'NEET UG',                   desc: 'Medical Entrance Exam',           color: '#10b981' },
-    { to: '/upsc',   icon: <FaLandmark className="text-xl" />,  title: 'UPSC CSE',                  desc: 'Civil Services Exam',             color: '#8b5cf6' },
-    { to: '/mhtcet', icon: <FaPen className="text-xl" />,       title: 'MHT-CET',                   desc: 'Maharashtra CET',                 color: '#f59e0b' },
-    { to: '/dsa',    icon: <FaLaptopCode className="text-xl" />,title: 'DSA',                       desc: 'Data Structures & Algorithms',    color: '#ec4899' },
+    { 
+      to: '/jee', 
+      icon: <FaBolt className="text-xl" />, 
+      title: 'JEE Preparation', 
+      desc: 'IIT JEE Main & Advanced', 
+      color: '#6366f1',
+      image: '/images/courses/jee.jpg'
+    },
+    { 
+      to: '/neet', 
+      icon: <FaHeartbeat className="text-xl" />, 
+      title: 'NEET UG', 
+      desc: 'Medical Entrance Exam', 
+      color: '#10b981',
+      image: '/images/courses/neet.jpg'
+    },
+    { 
+      to: '/upsc', 
+      icon: <FaLandmark className="text-xl" />, 
+      title: 'UPSC CSE', 
+      desc: 'Civil Services Exam', 
+      color: '#8b5cf6',
+      image: '/images/courses/upsc.jpg'
+    },
+    { 
+      to: '/mhtcet', 
+      icon: <FaPen className="text-xl" />, 
+      title: 'MHT-CET', 
+      desc: 'Maharashtra CET', 
+      color: '#f59e0b',
+      image: '/images/courses/mhtcet.jpg'
+    },
+    { 
+      to: '/dsa', 
+      icon: <FaLaptopCode className="text-xl" />, 
+      title: 'DSA', 
+      desc: 'Data Structures & Algorithms', 
+      color: '#ec4899',
+      image: '/images/courses/dsa.jpg'
+    },
   ];
 
   // Toggle password visibility
@@ -504,7 +539,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
         </div>
       </div>
 
-      {/* ─── Popular Courses ─── */}
+      {/* ─── Popular Courses WITH IMAGES ─── */}
       <div id="courses" className="login-root py-16 px-4 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
@@ -517,25 +552,34 @@ const LoginPage: React.FC<LoginPageProps> = ({ darkMode, setDarkMode }) => {
               <Link
                 key={index}
                 to={course.to}
-                className="card-hover group bg-white dark:bg-gray-800 rounded-2xl shadow-md p-6 text-center border border-gray-100 dark:border-gray-700/60 flex flex-col items-center"
+                className="card-hover group bg-white dark:bg-gray-800 rounded-2xl shadow-md overflow-hidden border border-gray-100 dark:border-gray-700/60"
               >
-                <div
-                  className="h-1 w-12 rounded-full mb-5 opacity-80"
-                  style={{ background: course.color }}
-                />
-                <div
-                  className="text-3xl mb-4 w-14 h-14 rounded-2xl flex items-center justify-center"
-                  style={{ backgroundColor: course.color + '18', color: course.color }}
-                >
-                  {course.icon}
+                {/* Course Image */}
+                <div className="w-full h-40 overflow-hidden">
+                  <img 
+                    src={course.image} 
+                    alt={course.title} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
                 </div>
-                <h3 className="display-font font-bold text-base mb-1 text-gray-800 dark:text-white">{course.title}</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">{course.desc}</p>
-                <div
-                  className="mt-auto px-4 py-1.5 text-xs font-bold text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
-                  style={{ backgroundColor: course.color }}
-                >
-                  Explore
+                
+                {/* Content */}
+                <div className="p-5">
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="text-xl" style={{ color: course.color }}>
+                      {course.icon}
+                    </div>
+                    <h3 className="display-font font-bold text-base text-gray-800 dark:text-white">
+                      {course.title}
+                    </h3>
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">{course.desc}</p>
+                  <div
+                    className="inline-block px-4 py-1.5 text-xs font-bold text-white rounded-lg opacity-0 group-hover:opacity-100 transition-all duration-300"
+                    style={{ backgroundColor: course.color }}
+                  >
+                    Explore
+                  </div>
                 </div>
               </Link>
             ))}
