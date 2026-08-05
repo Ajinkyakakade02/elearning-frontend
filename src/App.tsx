@@ -8,6 +8,7 @@ import { useAuth } from './hooks/useAuth';
 // Import Header and Footer
 import Navbar from './components/core/Navbar';
 import Footer from './components/core/Footer';
+import ScrollToTop from './components/core/ScrollToTop'; // ← ADD THIS IMPORT
 
 import ProtectedRoute from './components/core/ProtectedRoute';
 
@@ -165,6 +166,7 @@ function App() {
     <AuthProvider>
       <NotificationProvider>
         <Router>
+          <ScrollToTop /> {/* ← ADD THIS LINE HERE - Inside Router, before Routes */}
           {process.env.NODE_ENV === 'development' && <AuthDebugger />}
           <Toaster 
             position="top-right"
@@ -189,7 +191,7 @@ function App() {
                 </PageLayout>
               } />
               
-              {/* Register Page - ADDED THIS */}
+              {/* Register Page */}
               <Route path="/register" element={
                 <PageLayout darkMode={darkMode} setDarkMode={setDarkMode} showNavbar={true}>
                   <RegisterPage darkMode={darkMode} setDarkMode={setDarkMode} />
