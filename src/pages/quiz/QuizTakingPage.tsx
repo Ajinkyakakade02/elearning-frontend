@@ -28,7 +28,7 @@ const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ darkMode, setDarkMode }
   const [showResults, setShowResults] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-  const [isPurchased, setIsPurchased] = useState(false);
+  const [isPurchased, setIsPurchased] = useState(true); // ← CHANGED: Always true for free access
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [topicInfo, setTopicInfo] = useState({
     title: '',
@@ -39,10 +39,9 @@ const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ darkMode, setDarkMode }
   });
 
   const checkPurchaseStatus = useCallback(() => {
-    // Mock check - in real app, call API to check if user purchased
-    const purchasedQuizzes = JSON.parse(localStorage.getItem('purchasedQuizzes') || '[]');
-    setIsPurchased(purchasedQuizzes.includes(subtopicId));
-  }, [subtopicId]);
+    // Since all quizzes are free, always return true
+    setIsPurchased(true);
+  }, []);
 
   const fetchQuestions = useCallback(async () => {
     setIsLoading(true);
@@ -188,15 +187,18 @@ const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ darkMode, setDarkMode }
   useEffect(() => {
     checkPurchaseStatus();
     fetchQuestions();
-  }, [checkPurchaseStatus, fetchQuestions, subtopicId]); // Added all dependencies
+  }, [checkPurchaseStatus, fetchQuestions, subtopicId]);
 
+  // ⏱️ FIXED TIMER - Now works without purchase check
   useEffect(() => {
-    if (timeLeft > 0 && !showResults && isPurchased) {
+    // Timer only runs when there is time left and results are not shown
+    if (timeLeft > 0 && !showResults) {
       const timer = setInterval(() => {
         setTimeLeft(prev => {
           if (prev <= 1) {
             clearInterval(timer);
             setShowResults(true);
+            showToast.warning('⏰ Time is up! Your quiz has been auto-submitted.');
             return 0;
           }
           return prev - 1;
@@ -204,7 +206,7 @@ const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ darkMode, setDarkMode }
       }, 1000);
       return () => clearInterval(timer);
     }
-  }, [timeLeft, showResults, isPurchased]);
+  }, [timeLeft, showResults]);
 
   const handleAnswerSelect = (optionIndex: number) => {
     if (!isPurchased) return;
@@ -425,7 +427,7 @@ const QuizTakingPage: React.FC<QuizTakingPageProps> = ({ darkMode, setDarkMode }
                       stroke="currentColor"
                       strokeWidth="8"
                       fill="transparent"
-                      className="text-gray-200 dark:text-gray-700"
+                      className="text-gray-200 dark:bg-gray-700"
                     />
                     <circle
                       cx="80"
