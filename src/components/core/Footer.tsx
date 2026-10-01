@@ -135,7 +135,7 @@ const Footer: React.FC<FooterProps> = ({ darkMode }) => {
               <li className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
                 <FaEnvelope className="text-blue-600 dark:text-blue-400 flex-shrink-0" />
                 <a href="mailto:support@elearn.com" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
-                  support@elearn.com
+                  supportelearn02@gmail.com
                 </a>
               </li>
               <li className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
